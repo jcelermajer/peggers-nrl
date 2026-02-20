@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pegger's Tipping 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface2: #1a2236;
+    --border: #1f2d45;
+    --accent: #f0b429;
+    --accent2: #38bdf8;
+    --red: #ef4444;
+    --green: #22c55e;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --font-display: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--text); }
+  nav { display: flex; gap: 4px; }
+  nav button {
+    background: none; border: none; color: var(--muted);
+    font-family: var(--font-display); font-size: 15px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 8px 16px; cursor: pointer; border-radius: 6px;
+    transition: all 0.2s;
+  }
+  nav button:hover { color: var(--text); background: var(--surface2); }
+  nav button.active { color: var(--accent); background: rgba(240,180,41,0.1); }
+  .admin-btn {
+    background: var(--surface2) !important;
+    color: var(--accent2) !important;
+    border: 1px solid var(--accent2) !important;
+  }
+
+  /* VIEWS */
+  .view { display: none; padding: 32px 24px; max-width: 1400px; margin: 0 auto; }
+  .view.active { display: block; }
+
+  /* LEADERBOARD */
+  .round-info {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  }
+  .round-badge {
+    background: var(--accent); color: #000;
+    font-family: var(--font-display); font-weight: 900;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 4px;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: 32px; font-weight: 900;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text);
+  }
+  .section-title span { color: var(--accent); }
+
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    font-family: var(--font-display); font-size: 12px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+    padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  tr:hover td { background: var(--surface2); }
+
+  .rank-cell {
+    font-family: var(--font-display); font-size: 22px; font-weight: 900;
+    color: var(--muted); width: 48px;
+  }
+  .rank-1 { color: var(--accent); }
+  .rank-2 { color: #94a3b8; }
+  .rank-3 { color: #cd7c3a; }
+
+  .tipper-name {
+    font-family: var(--font-display); font-size: 18px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .team-badge {
+    display: inline-block;
+    background: var(--surface2); border: 1px solid var(--border);
+    font-family: var(--font-display); font-size: 11px; font-weight: 700;
+    padding: 2px 6px; border-radius: 3px; color: var(--muted);
+    letter-spacing: 1px;
+  }
+  .score-cell {
+    font-family: var(--font-display); font-size: 20px; font-weight: 900;
+  }
+  .week-score { font-size: 13px; color: var(--muted); }
+  .pos-change { font-size: 13px; font-weight: 600; }
+  .pos-up { color: var(--green); }
+  .pos-down { color: var(--red); }
+  .pos-same { color: var(--muted); }
+  .power-bar {
+    height: 6px; background: var(--border); border-radius: 3px; width: 80px;
+  }
+  .power-fill { height: 100%; background: var(--accent2); border-radius: 3px; transition: width 0.5s; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 24px;
+  }
+  .card-title {
+    font-family: var(--font-display); font-size: 14px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  /* DASHBOARD */
+  .dash-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px;
+  }
+  .stat-label { font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .stat-value { font-family: var(--font-display); font-size: 36px; font-weight: 900; color: var(--accent); }
+  .stat-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  .podium {
+    display: flex; align-items: flex-end; gap: 8px; justify-content: center;
+    padding: 24px 0;
+  }
+  .podium-item { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .podium-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; text-transform: uppercase; }
+  .podium-score { font-size: 13px; color: var(--muted); }
+  .podium-block {
+    width: 90px; border-radius: 8px 8px 0 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 32px; font-weight: 900;
+  }
+  .podium-1 .podium-block { height: 120px; background: var(--accent); color: #000; }
+  .podium-2 .podium-block { height: 90px; background: #475569; color: var(--text); }
+  .podium-3 .podium-block { height: 70px; background: #92400e; color: var(--text); }
+
+  /* Round tips table in dashboard */
+  .round-table-wrap { overflow-x: auto; }
+  .round-table th, .round-table td { font-size: 12px; padding: 6px 8px; text-align: center; }
+  .round-table th:first-child, .round-table td:first-child { text-align: left; min-width: 160px; }
+  .tip-correct { color: var(--green); font-weight: 700; }
+  .tip-wrong { color: var(--red); }
+  .tip-margin-bonus { color: var(--accent); font-weight: 900; }
+
+  /* ADMIN */
+  .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }
+
+  .form-group { margin-bottom: 16px; }
+  label { display: block; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  input, select, textarea {
+    width: 100%; background: var(--bg); border: 1px solid var(--border);
+    color: var(--text); padding: 10px 12px; border-radius: 8px;
+    font-family: var(--font-body); font-size: 14px;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent2); }
+  select option { background: var(--surface); }
+
+  .btn {
+    background: var(--accent); color: #000;
+    font-family: var(--font-display); font-size: 15px; font-weight: 900;
+    letter-spacing: 1px; text-transform: uppercase;
+    border: none; padding: 12px 24px; border-radius: 8px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn:hover { background: #f5c842; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--surface2); color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border); transform: none; }
+  .btn-danger { background: var(--red); color: #fff; }
+  .btn-danger:hover { background: #dc2626; }
+  .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+  .game-row {
+    display: grid; grid-template-columns: 1fr auto auto; gap: 12px;
+    align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border);
+  }
+  .game-row:last-child { border-bottom: none; }
+  .game-label { font-weight: 600; font-size: 14px; }
+  .game-label small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+
+  .tip-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px; margin-top: 8px;
+  }
+  .tip-entry { display: flex; flex-direction: column; gap: 4px; }
+  .tip-entry label { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+  .tip-entry select { padding: 6px 8px; font-size: 12px; }
+
+  .password-screen {
+    max-width: 400px; margin: 80px auto; text-align: center;
+  }
+  .password-screen h2 {
+    font-family: var(--font-display); font-size: 28px; font-weight: 900;
+    text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;
+    color: var(--accent2);
+  }
+  .password-screen p { color: var(--muted); margin-bottom: 24px; }
+
+  .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 14px; }
+  .alert-success { background: rgba(34,197,94,0.1); border: 1px solid var(--green); color: var(--green); }
+  .alert-error { background: rgba(239,68,68,0.1); border: 1px solid var(--red); color: var(--red); }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab {
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--muted); font-family: var(--font-display); font-size: 13px;
+    font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { background: var(--accent); color: #000; border-color: var(--accent); }
+
+  .magic-badge { background: rgba(240,180,41,0.2); border: 1px solid var(--accent); color: var(--accent); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .origin-badge { background: rgba(56,189,248,0.2); border: 1px solid var(--accent2); color: var(--accent2); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+
+  /* Scrollable table wrapper */
+  .table-wrap { overflow-x: auto; }
+
+  .empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 16px; }
+
+  .setup-banner {
+    background: rgba(56,189,248,0.1); border: 1px solid var(--accent2);
+    border-radius: 8px; padding: 16px 20px; margin-bottom: 24px;
+    font-size: 14px; color: var(--accent2);
+  }
+
+  /* Google Sheets config */
+  .sheets-config { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .sheets-config p { font-size: 12px; color: var(--muted); margin-top: 8px; line-height: 1.6; }
+  .sheets-config code { background: var(--bg); padding: 2px 6px; border-radius: 4px; font-size: 11px; color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Pegger's <span>Tipping</span> 2026 <span style="font-size:14px;font-weight:400;color:var(--muted);letter-spacing:0.5px;">— brought to you by James' Royal Pies 🥛🥧</span></div>
+  <nav>
+    <button class="active" onclick="showView('leaderboard')">Leaderboard</button>
+    <button onclick="showView('dashboard')">Dashboard</button>
+    <button onclick="showView('rounds')">Rounds</button>
+    <button onclick="showView('rules')">Rules</button>
+    <button class="admin-btn" onclick="showView('admin')">Admin</button>
+  </nav>
+</header>
+
+<div id="view-leaderboard" class="view active">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+    <div class="section-title">Season <span>Standings</span></div>
+    <div id="current-round-badge" class="round-badge">Loading...</div>
+  </div>
+  <div class="card">
+    <div class="table-wrap">
+      <table id="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Pos</th>
+            <th>Tipper</th>
+            <th>Team</th>
+            <th>Total</th>
+            <th>Rnd</th>
+            <th>±1wk</th>
+            <th>±5wk</th>
+            <th>Power</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="view-dashboard" class="view">
+  <div class="section-title" style="margin-bottom:24px;">Dashboard <span>Overview</span></div>
+
+  <div class="dash-grid" id="stat-cards"></div>
+
+  <div class="card">
+    <div class="card-title">Top 3 Podium</div>
+    <div class="podium" id="podium"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Score Progression (Cumulative)</div>
+    <canvas id="progressChart" height="300"></canvas>
+  </div>
+</div>
+
+<div id="view-rounds" class="view">
+  <div class="section-title" style="margin-bottom:24px;">Round <span>Results</span></div>
+  <div class="tabs" id="round-tabs"></div>
+  <div id="round-detail"></div>
+</div>
+
+<div id="view-admin" class="view">
+  <div id="admin-password-screen" class="password-screen">
+    <h2>🔐 Admin</h2>
+    <p>Enter the admin password to manage rounds and results.</p>
+    <div class="form-group">
+      <input type="password" id="admin-pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')checkPassword()">
+    </div>
+    <button class="btn" onclick="checkPassword()">Enter</button>
+    <div id="pw-error" style="color:var(--red);margin-top:12px;font-size:14px;"></div>
+  </div>
+
+  <div id="admin-panel" style="display:none;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div class="section-title">Admin <span>Panel</span></div>
+      <button class="btn btn-secondary btn-sm" onclick="lockAdmin()">🔒 Lock</button>
+    </div>
+
+    <div class="setup-banner" id="sheets-setup-banner">
+      ⚙️ <strong>Setup required:</strong> Configure your Google Sheets connection below before using the app.
+    </div>
+
+    <div class="admin-grid">
+      <!-- Left: Sheets Config + Round Setup -->
+      <div>
+        <div class="card">
+          <div class="card-title">Google Sheets Config</div>
+          <div class="sheets-config">
+            <p>To connect to Google Sheets:<br>
+            1. Share your sheet publicly (view only)<br>
+            2. Create a Google Apps Script web app to handle reads/writes<br>
+            3. Paste the web app URL below<br><br>
+            <strong>OR</strong> use the <strong>local mode</strong> (data stored in browser, export JSON to back up).
+            </p>
+          </div>
+          <div class="form-group">
+            <label>Mode</label>
+            <select id="data-mode" onchange="updateMode()">
+              <option value="local">Local (browser storage)</option>
+              <option value="sheets">Google Sheets (Apps Script)</option>
+            </select>
+          </div>
+          <div id="sheets-url-group" class="form-group" style="display:none;">
+            <label>Apps Script Web App URL</label>
+            <input type="url" id="sheets-url" placeholder="https://script.google.com/macros/s/...">
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="saveConfig()">Save Config</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title">New Round</div>
+          <div class="form-group">
+            <label>Round Name</label>
+            <input type="text" id="new-round-name" placeholder="e.g. Round 3, Origin 1">
+          </div>
+          <div class="form-group">
+            <label>Round Type</label>
+            <select id="new-round-type">
+              <option value="normal">Normal</option>
+              <option value="magic">Magic Round (3x points)</option>
+              <option value="vegas">Vegas Round (2x points)</option>
+              <option value="origin">State of Origin</option>
+            </select>
+          </div>
+          <div id="games-list">
+            <div class="card-title" style="margin-top:8px;">Games</div>
+            <div id="games-container"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+            <button class="btn btn-secondary btn-sm" onclick="addGame()">+ Add Game</button>
+            <button class="btn btn-sm" onclick="saveRound()">Save Round</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Enter Tips + Results -->
+      <div>
+        <div class="card">
+          <div class="card-title">Enter Tips</div>
+          <div class="form-group">
+            <label>Select Round</label>
+            <select id="tips-round-select" onchange="loadTipsForm()">
+              <option value="">-- Select Round --</option>
+            </select>
+          </div>
+          <div id="tips-form"></div>
+          <div id="tips-save-btn" style="display:none;margin-top:16px;">
+            <button class="btn" onclick="saveTips()">Save Tips</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Enter Results</div>
+          <div class="form-group">
+            <label>Select Round</label>
+            <select id="results-round-select" onchange="loadResultsForm()">
+              <option value="">-- Select Round --</option>
+            </select>
+          </div>
+          <div id="results-form"></div>
+          <div id="results-save-btn" style="display:none;margin-top:16px;">
+            <button class="btn" onclick="saveResults()">Save Results & Calculate Scores</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Data Management</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="loadFromSheets()">↓ Sync from Sheets</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportData()">Export JSON Backup</button>
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">Import JSON</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn btn-danger btn-sm" onclick="clearAllData()">Clear All Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="view-rules" class="view">
+  <div class="section-title" style="margin-bottom:32px;">Competition <span>Rules</span></div>
+
+  <div style="max-width:720px;display:flex;flex-direction:column;gap:20px;">
+
+    <div class="card">
+      <div class="card-title">💰 Prize Money</div>
+      <table style="width:100%;">
+        <tr><td style="padding:6px 0;font-weight:600;">Winner</td><td style="padding:6px 0;color:var(--accent);font-family:var(--font-display);font-size:18px;font-weight:900;">$600</td></tr>
+        <tr><td style="padding:6px 0;">First Loser</td><td style="padding:6px 0;color:var(--muted);">$0</td></tr>
+        <tr><td style="padding:6px 0;">All other losers</td><td style="padding:6px 0;color:var(--muted);">$0</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎲 Multis</div>
+      <p style="line-height:1.8;font-size:14px;color:var(--text);">Each week the previous week's highest tipper can bet a $20 NRL (+Origin) multi, with all profits to go to end of season dinner.</p>
+      <p style="line-height:1.8;font-size:14px;color:var(--muted);margin-top:8px;">Closest margin bet is the tie-breaker for multi bet the following week, in case of a tie.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏉 Season Leaderboard</div>
+      <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li>✅ Each game is worth <strong>1 point</strong>. Tips must be submitted to WhatsApp prior to kickoff.</li>
+        <li>⭐ There is one <strong>bonus point</strong> available for picking a perfect round.</li>
+        <li>❌ If you tip against your team and they win, you <strong>lose a point</strong>.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📐 Margin</div>
+      <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li>🌙 The <strong>late Friday night game</strong> each week will be the margin game.</li>
+        <li>🎯 An exact margin is a <strong>bonus 3 points</strong>.</li>
+        <li>📊 Cumulative lowest margin score over the season worth <strong>10 points</strong> to the winner.</li>
+        <li>🔗 Closest to margin breaks tie-break for NRL multi bet the following week.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">✨ Bonus Rounds</div>
+      <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li><span class="magic-badge">2×</span> &nbsp;<strong>Vegas Games</strong> will be worth double points.</li>
+        <li><span class="origin-badge">ORIGIN</span> &nbsp;Each Origin game worth <strong>2 points</strong>, tipped with margins (3pts) and MOTM (1pt).</li>
+        <li><span class="magic-badge">3×</span> &nbsp;<strong>Magic Round</strong> tips will be worth triple points.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏆 Last Man Standing</div>
+      <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:8px;">
+        <li>From <strong>Round 6</strong>, each tipper makes an additional tip on a team they are confident will win from any game that round.</li>
+        <li>Correct → progress. Wrong → you're out.</li>
+        <li>You <strong>cannot tip the same team again</strong> for the rest of the competition. 16 teams, 16 weeks. Tip must be in before kickoff of the relevant game. Breaking either rule = <strong>DQ</strong>.</li>
+        <li>Tie breaks settled by the player who has previously tipped the lowest placed team on the NRL ladder and won.</li>
+        <li>Points: <strong>1st gets 16, 2nd gets 15 … 16th gets 1.</strong></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔥 First Coach Down</div>
+      <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>3 points</strong>.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🌟 Dally M</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px;">
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">5</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">1st</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">4</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">2nd</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">4</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">3rd</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">2</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">4th</div>
+        </div>
+        <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">1</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">5th</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🪜 Ladder</div>
+      <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
+        <li>✅ <strong>2 points</strong> for every team you get exactly right.</li>
+        <li>〰️ <strong>1 point</strong> if you are within 1 place (up or down) of your chosen position.</li>
+        <li>🎯 Total of <strong>34 points</strong> on offer — choose wisely!</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════════════
+const ADMIN_PASSWORD = 'nrl2025'; // Change this!
+
+const TIPPERS = ['Anish','Bev','David','George','Jacob','James','Jeremy','Jordan','Julian','Manettas','Pat','Phil','Ringo','Simon','Richard','Tim'];
+
+const TIPPER_TEAMS = {
+  'Anish': 'CB', 'Bev': 'SG', 'David': 'SR', 'George': 'RD',
+  'Jacob': 'SS', 'James': 'SR', 'Jeremy': 'CB', 'Jordan': 'CB',
+  'Julian': 'CB', 'Manettas': 'SE', 'Pat': 'CS', 'Phil': 'SE',
+  'Ringo': 'BB', 'Simon': 'WT', 'Richard': 'NK', 'Tim': 'NK'
+};
+
+const TEAMS = {
+  'BB':'Broncos','CR':'Raiders','CB':'Bulldogs','CS':'Sharks','GC':'Titans',
+  'SE':'Sea Eagles','MS':'Storm','NZ':'Warriors','NK':'Knights','NQ':'Cowboys',
+  'PE':'Eels','PP':'Panthers','SS':'Rabbitohs','SG':'Dragons','SR':'Roosters',
+  'WT':'Wests Tigers','RD':'Dolphins'
+};
+
+const TEAM_LIST = Object.entries(TEAMS).map(([code, name]) => ({code, name}));
+
+// Power ranking weights
+const POWER_WEIGHTS = { rank: 0.5, change1: 0.3, change5: 0.2 };
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+let appData = {
+  rounds: [],      // [{id, name, type, games, tips, results, scores}]
+  config: { mode: 'local', sheetsUrl: '' }
+};
+
+let adminUnlocked = false;
+let progressChart = null;
+
+// ═══════════════════════════════════════════════════════
+// STORAGE — local fallback + Google Sheets
+// ═══════════════════════════════════════════════════════
+function saveToStorage() {
+  localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
+  if (appData.config.mode === 'sheets' && appData.config.sheetsUrl) {
+    saveToSheets();
+  }
+}
+
+function loadFromStorage() {
+  const raw = localStorage.getItem('nrl_tipping_2026');
+  if (raw) {
+    try { appData = JSON.parse(raw); } catch(e) {}
+  }
+}
+
+async function saveToSheets() {
+  try {
+    await fetch(appData.config.sheetsUrl, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'save', data: appData })
+    });
+  } catch(e) {
+    console.warn('Sheets save failed:', e);
+  }
+}
+
+async function loadFromSheets() {
+  if (appData.config.mode !== 'sheets' || !appData.config.sheetsUrl) return;
+  try {
+    const res = await fetch(appData.config.sheetsUrl + '?action=load');
+    const data = await res.json();
+    if (data && data.rounds) {
+      appData = data;
+      localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
+      renderLeaderboard();
+      showAlert('Loaded from Google Sheets!', 'success');
+    }
+  } catch(e) {
+    showAlert('Could not reach Google Sheets. Using local data.', 'error');
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// SCORING ENGINE
+// ═══════════════════════════════════════════════════════
+function calculateRoundScores(round) {
+  const scores = {};
+  TIPPERS.forEach(t => scores[t] = 0);
+
+  if (!round.results || !round.tips) return scores;
+
+  const multiplier = round.type === 'magic' ? 3 : round.type === 'vegas' ? 2 : 1;
+
+  // Track perfect round per tipper
+  const perfect = {};
+  TIPPERS.forEach(t => perfect[t] = true);
+
+  round.games.forEach((game, idx) => {
+    const result = round.results[idx];
+    if (!result || !result.winner) return; // not yet played
+
+    const isMarginGame = game.isMarginGame;
+    const actualMargin = parseInt(result.margin) || 0;
+
+    TIPPERS.forEach(tipper => {
+      const tip = round.tips[tipper] && round.tips[tipper][idx];
+      if (!tip) { perfect[tipper] = false; return; }
+
+      // Correct tip
+      if (tip.team === result.winner) {
+        scores[tipper] += 1 * multiplier;
+
+        // Exact margin bonus (3pts, not multiplied by magic round per rules interpretation)
+        if (isMarginGame && tip.margin !== undefined && tip.margin !== '') {
+          const tipMargin = parseInt(tip.margin);
+          if (tipMargin === actualMargin) {
+            scores[tipper] += 3;
+          }
+        }
+      } else {
+        perfect[tipper] = false;
+
+        // Tip against your team and they win = -1pt
+        const supportedTeam = TIPPER_TEAMS[tipper];
+        if (result.winner === supportedTeam) {
+          scores[tipper] -= 1;
+        }
+      }
+    });
+  });
+
+  // Perfect round bonus
+  TIPPERS.forEach(tipper => {
+    const allPlayed = round.games.every((g, i) => round.results[i] && round.results[i].winner);
+    if (allPlayed && perfect[tipper]) {
+      scores[tipper] += 1 * multiplier;
+    }
+  });
+
+  return scores;
+}
+
+function buildLeaderboard() {
+  // Cumulative scores per round
+  const cumulative = {};
+  TIPPERS.forEach(t => cumulative[t] = []);
+
+  const rounds = appData.rounds.filter(r => r.scores);
+
+  rounds.forEach(round => {
+    TIPPERS.forEach(tipper => {
+      const prev = cumulative[tipper].length > 0 ? cumulative[tipper][cumulative[tipper].length-1] : 0;
+      cumulative[tipper].push(prev + (round.scores[tipper] || 0));
+    });
+  });
+
+  const n = rounds.length;
+  if (n === 0) return [];
+
+  // Current total
+  const totals = {};
+  TIPPERS.forEach(t => totals[t] = cumulative[t][n-1] || 0);
+
+  // Rank by total
+  const ranked = TIPPERS.slice().sort((a,b) => totals[b] - totals[a]);
+  const rankMap = {};
+  ranked.forEach((t, i) => rankMap[t] = i+1);
+
+  // 1-week change
+  const change1 = {};
+  if (n >= 2) {
+    const prevTotals = {};
+    TIPPERS.forEach(t => prevTotals[t] = cumulative[t][n-2] || 0);
+    const prevRanked = TIPPERS.slice().sort((a,b) => prevTotals[b] - prevTotals[a]);
+    const prevRankMap = {};
+    prevRanked.forEach((t, i) => prevRankMap[t] = i+1);
+    TIPPERS.forEach(t => change1[t] = prevRankMap[t] - rankMap[t]); // positive = moved up
+  } else {
+    TIPPERS.forEach(t => change1[t] = 0);
+  }
+
+  // 5-week change
+  const change5 = {};
+  if (n >= 6) {
+    const prev5Totals = {};
+    TIPPERS.forEach(t => prev5Totals[t] = cumulative[t][n-6] || 0);
+    const prev5Ranked = TIPPERS.slice().sort((a,b) => prev5Totals[b] - prev5Totals[a]);
+    const prev5RankMap = {};
+    prev5Ranked.forEach((t, i) => prev5RankMap[t] = i+1);
+    TIPPERS.forEach(t => change5[t] = prev5RankMap[t] - rankMap[t]);
+  } else {
+    TIPPERS.forEach(t => change5[t] = 0);
+  }
+
+  // Power ranking (normalised)
+  const nTippers = TIPPERS.length;
+  const powerScores = {};
+  TIPPERS.forEach(t => {
+    const rankScore = (nTippers - rankMap[t]) / (nTippers - 1) * 100;
+    const c1Score = Math.min(Math.max(change1[t], -15), 15);
+    const c1Norm = (c1Score + 15) / 30 * 100;
+    const c5Score = Math.min(Math.max(change5[t], -15), 15);
+    const c5Norm = (c5Score + 15) / 30 * 100;
+    powerScores[t] = rankScore * POWER_WEIGHTS.rank + c1Norm * POWER_WEIGHTS.change1 + c5Norm * POWER_WEIGHTS.change5;
+  });
+
+  // Week score
+  const weekScore = {};
+  TIPPERS.forEach(t => weekScore[t] = rounds[n-1].scores[t] || 0);
+
+  return ranked.map(tipper => ({
+    tipper,
+    rank: rankMap[tipper],
+    total: totals[tipper],
+    weekScore: weekScore[tipper],
+    change1: change1[tipper],
+    change5: change5[tipper],
+    power: powerScores[tipper],
+    cumulative: cumulative[tipper],
+    team: TIPPER_TEAMS[tipper]
+  }));
+}
+
+// ═══════════════════════════════════════════════════════
+// VIEWS
+// ═══════════════════════════════════════════════════════
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+  renderView(name);
+}
+
+function renderView(name) {
+  if (name === 'leaderboard') renderLeaderboard();
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'rounds') renderRounds();
+  if (name === 'admin') renderAdmin();
+}
+
+// ═══════════════════════════════════════════════════════
+// LEADERBOARD VIEW
+// ═══════════════════════════════════════════════════════
+function renderLeaderboard() {
+  const lb = buildLeaderboard();
+  const roundCount = appData.rounds.filter(r => r.scores).length;
+
+  document.getElementById('current-round-badge').textContent =
+    roundCount > 0 ? `After Round ${roundCount}` : 'No rounds played';
+
+  const tbody = document.getElementById('leaderboard-body');
+
+  if (lb.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🏉</div><p>No rounds completed yet. Enter results in Admin to see standings.</p></div></td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = lb.map(row => {
+    const c1html = row.change1 > 0
+      ? `<span class="pos-up">▲${row.change1}</span>`
+      : row.change1 < 0
+        ? `<span class="pos-down">▼${Math.abs(row.change1)}</span>`
+        : `<span class="pos-same">–</span>`;
+
+    const c5html = row.change5 > 0
+      ? `<span class="pos-up">▲${row.change5}</span>`
+      : row.change5 < 0
+        ? `<span class="pos-down">▼${Math.abs(row.change5)}</span>`
+        : `<span class="pos-same">–</span>`;
+
+    const rankClass = row.rank <= 3 ? `rank-${row.rank}` : '';
+    const powerPct = Math.round(row.power);
+
+    return `<tr>
+      <td class="rank-cell ${rankClass}">${row.rank}</td>
+      <td><div class="tipper-name">${row.tipper}</div></td>
+      <td><span class="team-badge">${row.team}</span></td>
+      <td class="score-cell">${row.total}</td>
+      <td class="week-score">${row.weekScore}</td>
+      <td>${c1html}</td>
+      <td>${c5html}</td>
+      <td>
+        <div class="power-bar"><div class="power-fill" style="width:${powerPct}%"></div></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${powerPct}</div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD VIEW
+// ═══════════════════════════════════════════════════════
+function renderDashboard() {
+  const lb = buildLeaderboard();
+  const rounds = appData.rounds.filter(r => r.scores);
+
+  // Stat cards
+  const statCards = document.getElementById('stat-cards');
+  if (lb.length === 0) {
+    statCards.innerHTML = '<p style="color:var(--muted)">No data yet.</p>';
+    document.getElementById('podium').innerHTML = '';
+    if (progressChart) { progressChart.destroy(); progressChart = null; }
+    return;
+  }
+
+  const leader = lb[0];
+  const lastRound = rounds[rounds.length-1];
+  const weekLeader = lb.slice().sort((a,b) => b.weekScore - a.weekScore)[0];
+
+  statCards.innerHTML = `
+    <div class="stat-card">
+      <div class="stat-label">Season Leader</div>
+      <div class="stat-value">${leader.tipper}</div>
+      <div class="stat-sub">${leader.total} points</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Rounds Played</div>
+      <div class="stat-value">${rounds.length}</div>
+      <div class="stat-sub">of the 2026 season</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Last Round Best</div>
+      <div class="stat-value">${weekLeader.tipper}</div>
+      <div class="stat-sub">${weekLeader.weekScore} pts — ${lastRound ? lastRound.name : ''}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Gap to Leader</div>
+      <div class="stat-value">${lb.length > 1 ? leader.total - lb[1].total : 0}</div>
+      <div class="stat-sub">points ahead of ${lb.length > 1 ? lb[1].tipper : '—'}</div>
+    </div>
+  `;
+
+  // Podium
+  const top3 = lb.slice(0, 3);
+  const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
+  const podiumClasses = top3.length >= 3 ? ['podium-2','podium-1','podium-3'] : ['podium-1','podium-2','podium-3'];
+  const podiumNums = top3.length >= 3 ? [2,1,3] : [1,2,3];
+
+  document.getElementById('podium').innerHTML = podiumOrder.map((p, i) => `
+    <div class="podium-item ${podiumClasses[i]}">
+      <div class="podium-name">${p.tipper}</div>
+      <div class="podium-score">${p.total} pts</div>
+      <div class="podium-block">${podiumNums[i]}</div>
+    </div>
+  `).join('');
+
+  // Progress chart
+  const ctx = document.getElementById('progressChart');
+  if (progressChart) { progressChart.destroy(); }
+
+  const colors = ['#f0b429','#38bdf8','#22c55e','#f87171','#a78bfa','#fb923c',
+                  '#34d399','#60a5fa','#f472b6','#facc15','#4ade80','#e879f9',
+                  '#38bdf8','#fb7185','#a3e635','#94a3b8'];
+
+  const labels = rounds.map(r => r.name);
+
+  const datasets = lb.map((row, i) => ({
+    label: row.tipper,
+    data: row.cumulative,
+    borderColor: colors[i % colors.length],
+    backgroundColor: 'transparent',
+    borderWidth: row.rank === 1 ? 3 : 1.5,
+    pointRadius: 3,
+    tension: 0.3
+  }));
+
+  progressChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#94a3b8', font: { family: 'Barlow', size: 12 }, boxWidth: 16, padding: 12 } }
+      },
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } }
+      }
+    }
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+// ROUNDS VIEW
+// ═══════════════════════════════════════════════════════
+function renderRounds() {
+  const tabs = document.getElementById('round-tabs');
+  const detail = document.getElementById('round-detail');
+
+  if (appData.rounds.length === 0) {
+    tabs.innerHTML = '';
+    detail.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>No rounds yet. Create rounds in Admin.</p></div>`;
+    return;
+  }
+
+  tabs.innerHTML = appData.rounds.map((r, i) =>
+    `<div class="tab ${i===0?'active':''}" onclick="showRoundDetail(${i}, this)">${r.name}</div>`
+  ).join('');
+
+  showRoundDetailById(0, detail);
+}
+
+function showRoundDetail(idx, el) {
+  document.querySelectorAll('#round-tabs .tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  showRoundDetailById(idx, document.getElementById('round-detail'));
+}
+
+function showRoundDetailById(idx, container) {
+  const round = appData.rounds[idx];
+  if (!round) return;
+
+  const vegasBadge = '<span style="background:rgba(168,85,247,0.2);border:1px solid #a855f7;color:#a855f7;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;">🎰 VEGAS ROUND</span>';
+  const typeBadge = round.type === 'magic'
+    ? '<span class="magic-badge">✨ MAGIC ROUND</span>'
+    : round.type === 'vegas'
+      ? vegasBadge
+      : round.type === 'origin'
+      ? '<span class="origin-badge">⚡ STATE OF ORIGIN</span>'
+      : '';
+
+  let html = `<div class="card">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+      <div class="card-title" style="margin-bottom:0;">${round.name}</div>
+      ${typeBadge}
+      ${round.scores ? '<span style="color:var(--green);font-size:12px;font-weight:700;">✓ SCORED</span>' : '<span style="color:var(--muted);font-size:12px;">⏳ Pending results</span>'}
+    </div>
+    <div class="round-table-wrap">
+    <table class="round-table">
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Result</th>
+          ${TIPPERS.map(t => `<th>${t.substring(0,4)}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>`;
+
+  round.games.forEach((game, gi) => {
+    const result = round.results && round.results[gi];
+    const winner = result && result.winner;
+    const margin = result && result.margin;
+
+    html += `<tr>
+      <td style="text-align:left;">
+        <strong>${game.home} v ${game.away}</strong>
+        ${game.isMarginGame ? '<br><small style="color:var(--accent)">Margin Game</small>' : ''}
+      </td>
+      <td>
+        ${winner ? `<strong>${winner}</strong>${margin !== undefined ? `<br><small>${margin > 0 ? '+' : ''}${margin}</small>` : ''}` : '<span style="color:var(--muted)">TBD</span>'}
+      </td>`;
+
+    TIPPERS.forEach(tipper => {
+      const tip = round.tips && round.tips[tipper] && round.tips[tipper][gi];
+      const tipTeam = tip && tip.team;
+      const tipMargin = tip && tip.margin;
+
+      let cls = '';
+      if (winner && tipTeam) {
+        cls = tipTeam === winner ? 'tip-correct' : 'tip-wrong';
+      }
+      html += `<td class="${cls}">${tipTeam || '–'}${game.isMarginGame && tipMargin !== undefined && tipMargin !== '' ? `<br><small>${tipMargin}</small>` : ''}</td>`;
+    });
+
+    html += '</tr>';
+  });
+
+  // Round totals row
+  if (round.scores) {
+    const sorted = TIPPERS.map(t => t);
+    html += `<tr style="border-top:2px solid var(--border);">
+      <td><strong>Points</strong></td>
+      <td></td>
+      ${TIPPERS.map(t => `<td><strong>${round.scores[t] || 0}</strong></td>`).join('')}
+    </tr>`;
+  }
+
+  html += '</tbody></table></div></div>';
+  container.innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
+// ADMIN VIEW
+// ═══════════════════════════════════════════════════════
+function renderAdmin() {
+  if (!adminUnlocked) {
+    document.getElementById('admin-password-screen').style.display = 'block';
+    document.getElementById('admin-panel').style.display = 'none';
+  } else {
+    document.getElementById('admin-password-screen').style.display = 'none';
+    document.getElementById('admin-panel').style.display = 'block';
+    populateAdminRoundSelects();
+    renderGamesList();
+  }
+}
+
+function checkPassword() {
+  const pw = document.getElementById('admin-pw-input').value;
+  if (pw === ADMIN_PASSWORD) {
+    adminUnlocked = true;
+    document.getElementById('pw-error').textContent = '';
+    renderAdmin();
+  } else {
+    document.getElementById('pw-error').textContent = 'Incorrect password.';
+  }
+}
+
+function lockAdmin() {
+  adminUnlocked = false;
+  document.getElementById('admin-pw-input').value = '';
+  renderAdmin();
+}
+
+function updateMode() {
+  const mode = document.getElementById('data-mode').value;
+  document.getElementById('sheets-url-group').style.display = mode === 'sheets' ? 'block' : 'none';
+}
+
+function saveConfig() {
+  appData.config.mode = document.getElementById('data-mode').value;
+  appData.config.sheetsUrl = document.getElementById('sheets-url').value;
+  saveToStorage();
+  document.getElementById('sheets-setup-banner').style.display = 'none';
+  showAlert('Config saved!', 'success');
+}
+
+// Games builder
+let gamesList = [];
+
+function renderGamesList() {
+  const container = document.getElementById('games-container');
+  if (gamesList.length === 0) {
+    container.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-bottom:8px;">No games added yet.</p>';
+    return;
+  }
+
+  container.innerHTML = gamesList.map((g, i) => `
+    <div class="game-row">
+      <div>
+        <div class="game-label">${g.home || '?'} v ${g.away || '?'}</div>
+        <div style="font-size:11px;color:var(--muted);">${g.isMarginGame ? '⭐ Margin game' : ''}</div>
+      </div>
+      <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;">
+        <input type="checkbox" ${g.isMarginGame ? 'checked' : ''} onchange="toggleMarginGame(${i}, this.checked)" style="width:auto;">
+        Margin
+      </label>
+      <button class="btn btn-secondary btn-sm" onclick="removeGame(${i})">✕</button>
+    </div>
+  `).join('');
+}
+
+function addGame() {
+  // Prompt-style inline add
+  const container = document.getElementById('games-container');
+  const div = document.createElement('div');
+  div.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;';
+  div.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;">
+      <div>
+        <label>Home Team</label>
+        <select id="new-home">
+          ${TEAM_LIST.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}
+        </select>
+      </div>
+      <div>
+        <label>Away Team</label>
+        <select id="new-away">
+          ${TEAM_LIST.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}
+        </select>
+      </div>
+      <button class="btn btn-sm" onclick="confirmAddGame(this)">Add</button>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function confirmAddGame(btn) {
+  const parent = btn.closest('div').parentElement;
+  const home = parent.querySelector('#new-home').value;
+  const away = parent.querySelector('#new-away').value;
+  gamesList.push({ home, away, isMarginGame: false });
+  parent.remove();
+  renderGamesList();
+}
+
+function toggleMarginGame(idx, val) {
+  // Clear all margin games first, then set this one
+  gamesList.forEach(g => g.isMarginGame = false);
+  gamesList[idx].isMarginGame = val;
+  renderGamesList();
+}
+
+function removeGame(idx) {
+  gamesList.splice(idx, 1);
+  renderGamesList();
+}
+
+function saveRound() {
+  const name = document.getElementById('new-round-name').value.trim();
+  const type = document.getElementById('new-round-type').value;
+  if (!name) { showAlert('Please enter a round name.', 'error'); return; }
+  if (gamesList.length === 0) { showAlert('Please add at least one game.', 'error'); return; }
+
+  const round = {
+    id: Date.now(),
+    name, type,
+    games: JSON.parse(JSON.stringify(gamesList)),
+    tips: null,
+    results: null,
+    scores: null
+  };
+
+  appData.rounds.push(round);
+  saveToStorage();
+  gamesList = [];
+  document.getElementById('new-round-name').value = '';
+  renderGamesList();
+  populateAdminRoundSelects();
+  showAlert(`Round "${name}" saved!`, 'success');
+}
+
+function populateAdminRoundSelects() {
+  ['tips-round-select','results-round-select'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '<option value="">-- Select Round --</option>' +
+      appData.rounds.map((r,i) => `<option value="${i}">${r.name}</option>`).join('');
+  });
+}
+
+// Tips form
+function loadTipsForm() {
+  const idx = document.getElementById('tips-round-select').value;
+  const container = document.getElementById('tips-form');
+  const saveBtn = document.getElementById('tips-save-btn');
+  if (idx === '') { container.innerHTML = ''; saveBtn.style.display = 'none'; return; }
+
+  const round = appData.rounds[idx];
+  const existingTips = round.tips || {};
+
+  let html = '';
+  round.games.forEach((game, gi) => {
+    html += `<div style="margin-bottom:20px;">
+      <div style="font-weight:700;margin-bottom:8px;font-size:15px;">
+        Game ${gi+1}: ${game.home} v ${game.away}
+        ${game.isMarginGame ? '<span class="magic-badge" style="margin-left:8px;">Margin Game</span>' : ''}
+      </div>
+      <div class="tip-grid">`;
+
+    TIPPERS.forEach(tipper => {
+      const existingTip = existingTips[tipper] && existingTips[tipper][gi];
+      const selectedTeam = existingTip ? existingTip.team : '';
+      const selectedMargin = existingTip ? existingTip.margin : '';
+
+      html += `<div class="tip-entry">
+        <label>${tipper}</label>
+        <select id="tip-${gi}-${tipper}-team">
+          <option value="">–</option>
+          <option value="${game.home}" ${selectedTeam===game.home?'selected':''}>${game.home}</option>
+          <option value="${game.away}" ${selectedTeam===game.away?'selected':''}>${game.away}</option>
+        </select>
+        ${game.isMarginGame ? `<input type="number" id="tip-${gi}-${tipper}-margin" placeholder="Margin" value="${selectedMargin}" style="margin-top:4px;">` : ''}
+      </div>`;
+    });
+
+    html += '</div></div>';
+  });
+
+  container.innerHTML = html;
+  saveBtn.style.display = 'block';
+}
+
+function saveTips() {
+  const idx = document.getElementById('tips-round-select').value;
+  if (idx === '') return;
+  const round = appData.rounds[idx];
+
+  const tips = {};
+  TIPPERS.forEach(tipper => {
+    tips[tipper] = round.games.map((game, gi) => {
+      const team = document.getElementById(`tip-${gi}-${tipper}-team`)?.value || '';
+      const marginEl = document.getElementById(`tip-${gi}-${tipper}-margin`);
+      const margin = marginEl ? marginEl.value : undefined;
+      return { team, margin };
+    });
+  });
+
+  round.tips = tips;
+  saveToStorage();
+  showAlert('Tips saved!', 'success');
+}
+
+// Results form
+function loadResultsForm() {
+  const idx = document.getElementById('results-round-select').value;
+  const container = document.getElementById('results-form');
+  const saveBtn = document.getElementById('results-save-btn');
+  if (idx === '') { container.innerHTML = ''; saveBtn.style.display = 'none'; return; }
+
+  const round = appData.rounds[idx];
+  const existingResults = round.results || [];
+
+  let html = '';
+  round.games.forEach((game, gi) => {
+    const existing = existingResults[gi] || {};
+    html += `<div class="game-row">
+      <div>
+        <div class="game-label">${game.home} v ${game.away}</div>
+        ${game.isMarginGame ? '<small style="color:var(--accent)">Margin game</small>' : ''}
+      </div>
+      <select id="result-${gi}-winner" style="width:120px;">
+        <option value="">–</option>
+        <option value="${game.home}" ${existing.winner===game.home?'selected':''}>${game.home}</option>
+        <option value="${game.away}" ${existing.winner===game.away?'selected':''}>${game.away}</option>
+      </select>
+      ${game.isMarginGame ? `<input type="number" id="result-${gi}-margin" placeholder="Margin" value="${existing.margin||''}" style="width:90px;">` : '<div></div>'}
+    </div>`;
+  });
+
+  container.innerHTML = html;
+  saveBtn.style.display = 'block';
+}
+
+function saveResults() {
+  const idx = document.getElementById('results-round-select').value;
+  if (idx === '') return;
+  const round = appData.rounds[idx];
+
+  round.results = round.games.map((game, gi) => {
+    const winner = document.getElementById(`result-${gi}-winner`)?.value || '';
+    const marginEl = document.getElementById(`result-${gi}-margin`);
+    const margin = marginEl ? parseInt(marginEl.value) || 0 : undefined;
+    return { winner, margin };
+  });
+
+  // Calculate scores
+  round.scores = calculateRoundScores(round);
+  saveToStorage();
+  showAlert('Results saved and scores calculated!', 'success');
+}
+
+// ═══════════════════════════════════════════════════════
+// DATA MANAGEMENT
+// ═══════════════════════════════════════════════════════
+function exportData() {
+  const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `nrl-tipping-backup-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      appData = JSON.parse(e.target.result);
+      saveToStorage();
+      showAlert('Data imported successfully!', 'success');
+      renderAdmin();
+    } catch(err) {
+      showAlert('Invalid JSON file.', 'error');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function clearAllData() {
+  if (!confirm('Are you sure? This will delete all rounds, tips and results.')) return;
+  appData = { rounds: [], config: appData.config };
+  saveToStorage();
+  showAlert('All data cleared.', 'success');
+}
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+function showAlert(msg, type) {
+  const existing = document.querySelector('.floating-alert');
+  if (existing) existing.remove();
+  const div = document.createElement('div');
+  div.className = `alert alert-${type} floating-alert`;
+  div.style.cssText = 'position:fixed;top:80px;right:24px;z-index:999;max-width:320px;box-shadow:0 4px 24px rgba(0,0,0,0.4)';
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+loadFromStorage();
+loadFromSheets();
+renderLeaderboard();
+</script>
+</body>
+</html>

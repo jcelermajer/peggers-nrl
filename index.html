@@ -616,7 +616,10 @@ async function loadFromSheets() {
     const text = await res.text();
     const data = JSON.parse(text);
     if (data && data.rounds) {
+      // Preserve local config — don't overwrite with sheet's config
+      const localConfig = appData.config;
       appData = data;
+      appData.config = localConfig;
       localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
       renderLeaderboard();
       showAlert('Loaded from Google Sheets!', 'success');
@@ -1340,6 +1343,12 @@ function showAlert(msg, type) {
 // INIT
 // ═══════════════════════════════════════════════════════
 loadFromStorage();
+// Restore config fields
+if (appData.config) {
+  if (appData.config.mode) document.getElementById('data-mode').value = appData.config.mode;
+  if (appData.config.sheetsUrl) document.getElementById('sheets-url').value = appData.config.sheetsUrl;
+  if (appData.config.mode === 'sheets') document.getElementById('sheets-url-group').style.display = 'block';
+}
 loadFromSheets();
 renderLeaderboard();
 </script>

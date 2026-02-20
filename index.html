@@ -449,7 +449,7 @@
     <div class="card">
       <div class="card-title">Data Management</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn btn-secondary btn-sm" onclick="loadFromSheets()">↓ Sync from Sheets</button>
+        <button class="btn btn-secondary btn-sm" onclick="manualSyncFromSheets()">↓ Sync from Sheets</button>
         <button class="btn btn-secondary btn-sm" onclick="exportData()">Export JSON Backup</button>
         <button class="btn btn-secondary btn-sm" onclick="document.getElementById('import-file').click()">Import JSON</button>
         <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
@@ -628,25 +628,35 @@ async function saveToSheets() {
 }
 
 async function loadFromSheets() {
-  if (appData.config.mode !== 'sheets' || !appData.config.sheetsUrl) return;
+  if (!appData.config || appData.config.mode !== 'sheets' || !appData.config.sheetsUrl) return;
   try {
-    const res = await fetch(appData.config.sheetsUrl + '?action=load');
+    const url = appData.config.sheetsUrl + '?action=load&t=' + Date.now(); // cache-bust
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
-    const data = JSON.parse(text);
-    if (data && data.rounds) {
-      // Preserve local config — don't overwrite with sheet's config
-      const localConfig = appData.config;
+    let data;
+    try { data = JSON.parse(text); } catch(e) { throw new Error('Invalid JSON from Sheets'); }
+    if (data && Array.isArray(data.rounds)) {
+      const localConfig = appData.config; // always preserve local config
       appData = data;
       appData.config = localConfig;
       localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
-      renderLeaderboard();
-      showAlert('Loaded from Google Sheets!', 'success');
-    } else {
-      showAlert('Sheets returned no data.', 'error');
     }
+    // silently succeed — no alert on auto-load, only on manual sync
   } catch(e) {
-    showAlert('Could not reach Google Sheets: ' + e.message, 'error');
+    console.warn('Sheets load failed:', e.message);
+    // fall through to local storage data — no alert so casual visitors don't see errors
   }
+}
+
+async function manualSyncFromSheets() {
+  if (!appData.config || !appData.config.sheetsUrl) {
+    showAlert('No Sheets URL configured.', 'error'); return;
+  }
+  showAlert('Syncing...', 'success');
+  await loadFromSheets();
+  renderLeaderboard();
+  showAlert('Sync complete!', 'success');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1360,15 +1370,33 @@ function showAlert(msg, type) {
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-loadFromStorage();
-// Restore config fields
-if (appData.config) {
-  if (appData.config.mode) document.getElementById('data-mode').value = appData.config.mode;
-  if (appData.config.sheetsUrl) document.getElementById('sheets-url').value = appData.config.sheetsUrl;
-  if (appData.config.mode === 'sheets') document.getElementById('sheets-url-group').style.display = 'block';
+// ── INIT ──
+// Always load config from local storage first (so we know the Sheets URL)
+// Then always fetch live data from Sheets before rendering anything
+(async function init() {
+  loadFromStorage();
+  restoreConfigFields();
+  showLoadingState();
+  if (appData.config && appData.config.mode === 'sheets' && appData.config.sheetsUrl) {
+    await loadFromSheets();
+  }
+  renderLeaderboard();
+})();
+
+function showLoadingState() {
+  document.getElementById('leaderboard-body').innerHTML =
+    '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading data...</td></tr>';
 }
-loadFromSheets();
-renderLeaderboard();
+
+function restoreConfigFields() {
+  if (!appData.config) return;
+  const modeEl = document.getElementById('data-mode');
+  const urlEl = document.getElementById('sheets-url');
+  const urlGroup = document.getElementById('sheets-url-group');
+  if (appData.config.mode && modeEl) modeEl.value = appData.config.mode;
+  if (appData.config.sheetsUrl && urlEl) urlEl.value = appData.config.sheetsUrl;
+  if (appData.config.mode === 'sheets' && urlGroup) urlGroup.style.display = 'block';
+}
 </script>
 </body>
 </html>

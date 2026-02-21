@@ -279,7 +279,7 @@
 
 <header>
   <div class="header-top">
-    <div class="logo">Pegger's <span>Tipping</span> 2026<small>brought to you by <italic>James' Royal Pies</italic> 🤴🥛🥧</small></div>
+    <div class="logo">Pegger's <span>Tipping</span> 2026<small>brought to you by James' Royal Pies 🥛🥧</small></div>
   </div>
   <nav>
     <button class="active" onclick="showView('leaderboard')">Leaderboard</button>
@@ -574,22 +574,10 @@
     <div id="sb-teams-display"></div>
   </div>
 
-  <!-- Dally M -->
+  <!-- Combined: Dally M + Coach + Ladder -->
   <div class="card" style="margin-bottom:20px;">
-    <div class="card-title">🌟 Dally M Picks</div>
-    <div id="sb-dallym-display"></div>
-  </div>
-
-  <!-- First Coach Fired -->
-  <div class="card" style="margin-bottom:20px;">
-    <div class="card-title">🔥 First Coach Fired</div>
-    <div id="sb-coach-display"></div>
-  </div>
-
-  <!-- Ladder -->
-  <div class="card" style="margin-bottom:20px;">
-    <div class="card-title">🪜 Ladder Predictions</div>
-    <div id="sb-ladder-display"></div>
+    <div class="card-title">🌟 Dally M · 🔥 First Coach · 🪜 Ladder</div>
+    <div id="sb-combined-display"></div>
   </div>
 
   <!-- Admin entry panel (hidden by default) -->
@@ -598,10 +586,10 @@
       <div class="card-title">✏️ Enter Season Bets Data</div>
 
       <div style="margin-bottom:24px;">
-        <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">Dally M Picks (top 5 per tipper)</div>
+        <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">Dally M Picks (one pick per tipper)</div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Tipper</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th></tr></thead>
+            <thead><tr><th>Tipper</th><th>Pick</th></tr></thead>
             <tbody id="dallym-input-rows"></tbody>
           </table>
         </div>
@@ -1483,13 +1471,16 @@ function showAlert(msg, type) {
 // SEASON BETS
 // ═══════════════════════════════════════════════════════
 const LADDER_POSITIONS = ['1st','2nd','3rd','4th','5th','6th','7th','8th','9th','10th','11th','12th','13th','14th','15th','16th','17th'];
-const DALLYM_POINTS = [5,4,4,2,1];
+const DALLYM_POINTS = [5,4,3,2,1];
 
 function renderSeasonBets() {
   if (adminUnlocked) document.getElementById('season-bets-edit-btn').style.display = 'inline-block';
 
   const sb = appData.seasonBets || {};
   const results = sb.results || {};
+  const dallyPicks = sb.dallyM || {};
+  const coachPicks = sb.coach || {};
+  const ladderPicks = sb.ladder || {};
 
   // --- Supported Teams ---
   const teamsDiv = document.getElementById('sb-teams-display');
@@ -1502,91 +1493,122 @@ function renderSeasonBets() {
       </div>`).join('')}
   </div>`;
 
-  // --- Dally M ---
-  const dallyDiv = document.getElementById('sb-dallym-display');
-  const dallyPicks = sb.dallyM || {};
-  const dallyResults = [results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].filter(Boolean);
-  const hasResults = dallyResults.length > 0;
+  // --- Combined Season Bets Table ---
+  const dallyResult = results.dallyM || ''; // actual winner
+  const dallyTop5 = [results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].map(s => (s||'').toLowerCase().trim());
+  const coachResult = (results.coach || '').toLowerCase().trim();
+  const ladderResult = results.ladder || [];
+  const hasLadder = ladderResult.filter(Boolean).length > 0;
+  const hasDally = dallyTop5.filter(Boolean).length > 0;
+  const hasCoach = !!coachResult;
 
-  let dallyHTML = '<div class="table-wrap"><table><thead><tr><th>Tipper</th>';
-  DALLYM_POINTS.forEach((pts,i) => dallyHTML += `<th>${i+1}${['st','nd','rd','th','th'][i]} <small style="color:var(--muted)">(${pts}pt)</small></th>`);
-  dallyHTML += '<th>Score</th></tr></thead><tbody>';
-
+  // Scores per tipper
+  const dallyScores = {};
+  const coachScores = {};
+  const ladderScores = {};
   TIPPERS.forEach(t => {
-    const picks = dallyPicks[t] || [];
-    let score = 0;
-    dallyHTML += `<tr><td class="tipper-name" style="font-size:14px;">${t}</td>`;
-    for (let i=0;i<5;i++) {
-      const pick = picks[i] || '–';
-      let cls = '';
-      if (hasResults && picks[i]) {
-        const resultIdx = dallyResults.findIndex(r => r.toLowerCase().trim() === picks[i].toLowerCase().trim());
-        if (resultIdx !== -1) { cls = 'tip-correct'; score += DALLYM_POINTS[resultIdx]; }
-      }
-      dallyHTML += `<td class="${cls}">${pick}</td>`;
-    }
-    dallyHTML += `<td><strong>${score > 0 ? score : hasResults ? 0 : '–'}</strong></td></tr>`;
+    dallyScores[t] = 0;
+    coachScores[t] = 0;
+    ladderScores[t] = 0;
   });
-  dallyHTML += '</tbody></table></div>';
-  if (hasResults) dallyHTML += `<div style="margin-top:8px;font-size:12px;color:var(--muted);">Results: ${dallyResults.join(', ')}</div>`;
-  dallyDiv.innerHTML = dallyHTML;
 
-  // --- First Coach Fired ---
-  const coachDiv = document.getElementById('sb-coach-display');
-  const coachPicks = sb.coach || {};
-  const coachResult = results.coach || '';
-  let coachHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;">';
+  if (hasDally) {
+    TIPPERS.forEach(t => {
+      const pick = (dallyPicks[t] || '').toLowerCase().trim();
+      const idx = dallyTop5.indexOf(pick);
+      if (idx !== -1) dallyScores[t] = DALLYM_POINTS[idx];
+    });
+  }
+  if (hasCoach) {
+    TIPPERS.forEach(t => {
+      if ((coachPicks[t] || '').toLowerCase().trim() === coachResult) coachScores[t] = 3;
+    });
+  }
+  if (hasLadder) {
+    TIPPERS.forEach(t => {
+      (ladderPicks[t] || []).forEach((pick, idx) => {
+        const actualPos = ladderResult.indexOf(pick);
+        if (actualPos === idx) ladderScores[t] += 2;
+        else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) ladderScores[t] += 1;
+      });
+    });
+  }
+
+  let html = '<div class="table-wrap"><table><thead><tr><th style="min-width:120px;">Category</th>';
+  TIPPERS.forEach(t => html += `<th style="min-width:65px;font-size:11px;">${t.substring(0,6)}</th>`);
+  html += '</tr></thead><tbody>';
+
+  // Dally M row
+  html += '<tr style="background:rgba(240,180,41,0.05)"><td><strong style="color:var(--accent);">🌟 Dally M</strong><br><small style="color:var(--muted);">5/4/3/2/1 pts</small></td>';
+  TIPPERS.forEach(t => {
+    const pick = dallyPicks[t] || '–';
+    const score = dallyScores[t];
+    const cls = hasDally ? (score > 0 ? 'tip-correct' : 'tip-wrong') : '';
+    html += `<td class="${cls}">${pick}${hasDally && score > 0 ? `<br><small>+${score}pt</small>` : ''}</td>`;
+  });
+  html += '</tr>';
+
+  // Dally M score row
+  if (hasDally) {
+    html += '<tr><td style="color:var(--muted);font-size:12px;">Dally M Score</td>';
+    TIPPERS.forEach(t => html += `<td><strong>${dallyScores[t]}</strong></td>`);
+    html += '</tr>';
+    html += `<tr><td colspan="${TIPPERS.length+1}" style="font-size:11px;color:var(--muted);padding:4px 12px;">Top 5: ${[results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].filter(Boolean).join(', ')}</td></tr>`;
+  }
+
+  // Spacer
+  html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:4px;background:var(--border);"></td></tr>`;
+
+  // First Coach row
+  html += '<tr style="background:rgba(239,68,68,0.05)"><td><strong style="color:var(--red);">🔥 First Coach</strong><br><small style="color:var(--muted);">3 pts</small></td>';
   TIPPERS.forEach(t => {
     const pick = coachPicks[t] || '–';
-    const correct = coachResult && pick.toLowerCase().trim() === coachResult.toLowerCase().trim();
-    coachHTML += `<div style="background:var(--surface2);border-radius:8px;padding:12px;${correct?'border:1px solid var(--green);':''}">
-      <div style="font-family:var(--font-display);font-size:14px;font-weight:700;text-transform:uppercase;">${t}</div>
-      <div style="margin-top:6px;font-size:13px;color:${correct?'var(--green)':'var(--text)'};">${pick} ${correct ? '✅ +3pts' : ''}</div>
-    </div>`;
+    const correct = hasCoach && (pick.toLowerCase().trim() === coachResult);
+    html += `<td class="${correct ? 'tip-correct' : hasCoach ? 'tip-wrong' : ''}">${pick}${correct ? '<br><small>+3pt</small>' : ''}</td>`;
   });
-  coachHTML += '</div>';
-  if (coachResult) coachHTML += `<div style="margin-top:12px;font-size:12px;color:var(--muted);">First coach fired: <strong style="color:var(--text);">${coachResult}</strong></div>`;
-  coachDiv.innerHTML = coachHTML;
+  html += '</tr>';
+  if (hasCoach) {
+    html += '<tr><td style="color:var(--muted);font-size:12px;">Coach Score</td>';
+    TIPPERS.forEach(t => html += `<td><strong>${coachScores[t]}</strong></td>`);
+    html += `</tr><tr><td colspan="${TIPPERS.length+1}" style="font-size:11px;color:var(--muted);padding:4px 12px;">First fired: ${results.coach}</td></tr>`;
+  }
 
-  // --- Ladder ---
-  const ladderDiv = document.getElementById('sb-ladder-display');
-  const ladderPicks = sb.ladder || {};
-  const ladderResult = results.ladder || [];
-  const hasLadder = ladderResult.length > 0;
+  // Spacer
+  html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:4px;background:var(--border);"></td></tr>`;
 
-  let ladderHTML = '<div class="table-wrap"><table><thead><tr><th>Pos</th>';
-  TIPPERS.forEach(t => ladderHTML += `<th style="min-width:55px;font-size:11px;">${t.substring(0,5)}</th>`);
-  if (hasLadder) ladderHTML += '<th>Score</th>';
-  ladderHTML += '</tr></thead><tbody>';
-
-  // Calculate scores per tipper
-  const ladderScores = {};
-  TIPPERS.forEach(t => ladderScores[t] = 0);
-
+  // Ladder rows
+  html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:8px 12px;"><strong style="color:var(--accent2);">🪜 Ladder Predictions</strong> <small style="color:var(--muted);">2pts exact, 1pt ±1 place — 34pts available</small></td></tr>`;
   LADDER_POSITIONS.forEach((pos, idx) => {
-    ladderHTML += `<tr><td><strong>${pos}</strong></td>`;
+    html += `<tr><td><strong>${pos}</strong>${hasLadder && ladderResult[idx] ? `<br><small style="color:var(--muted);">${ladderResult[idx]}</small>` : ''}</td>`;
     TIPPERS.forEach(t => {
       const pick = (ladderPicks[t] || [])[idx] || '–';
       let cls = '';
       if (hasLadder && pick !== '–') {
-        const actualPos = ladderResult.findIndex(r => r === pick);
-        if (actualPos === idx) { cls = 'tip-correct'; ladderScores[t] += 2; }
-        else if (Math.abs(actualPos - idx) === 1) { cls = 'pos-same'; ladderScores[t] += 1; }
+        const actualPos = ladderResult.indexOf(pick);
+        if (actualPos === idx) cls = 'tip-correct';
+        else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) cls = 'pos-same';
         else if (actualPos !== -1) cls = 'tip-wrong';
       }
-      ladderHTML += `<td class="${cls}" style="font-size:11px;">${pick}</td>`;
+      html += `<td class="${cls}" style="font-size:11px;">${pick}</td>`;
     });
-    if (hasLadder) ladderHTML += '<td></td>';
-    ladderHTML += '</tr>';
+    html += '</tr>';
   });
 
-  if (hasLadder) {
-    ladderHTML += '<tr style="border-top:2px solid var(--border);"><td><strong>Pts</strong></td>';
-    TIPPERS.forEach(t => ladderHTML += `<td><strong>${ladderScores[t]}</strong></td>`);
-    ladderHTML += '<td></td></tr>';
-  }
-  ladderHTML += '</tbody></table></div>';
-  ladderDiv.innerHTML = ladderHTML;
+  // Ladder score row
+  html += '<tr style="border-top:2px solid var(--border);"><td><strong>Ladder Score</strong></td>';
+  TIPPERS.forEach(t => html += `<td><strong>${hasLadder ? ladderScores[t] : '–'}</strong></td>`);
+  html += '</tr>';
+
+  // Grand total row
+  html += '<tr style="background:rgba(240,180,41,0.08);border-top:2px solid var(--accent);"><td><strong style="color:var(--accent);">Total</strong></td>';
+  TIPPERS.forEach(t => {
+    const total = dallyScores[t] + coachScores[t] + ladderScores[t];
+    html += `<td><strong style="color:var(--accent);">${total > 0 || (hasDally && hasCoach && hasLadder) ? total : '–'}</strong></td>`;
+  });
+  html += '</tr>';
+
+  html += '</tbody></table></div>';
+  document.getElementById('sb-combined-display').innerHTML = html;
 }
 
 function showSeasonBetsAdmin() {
@@ -1597,28 +1619,26 @@ function showSeasonBetsAdmin() {
 
 function buildSeasonBetsForm() {
   const sb = appData.seasonBets || {};
-  const dallyPicks = sb.dallyM || {};
   const coachPicks = sb.coach || {};
   const ladderPicks = sb.ladder || {};
+  const dallyPicks = sb.dallyM || {};
   const results = sb.results || {};
 
-  // Dally M rows
+  // Dally M — one pick per tipper
   const dallyBody = document.getElementById('dallym-input-rows');
-  dallyBody.innerHTML = TIPPERS.map(t => {
-    const picks = dallyPicks[t] || [];
-    return `<tr><td style="font-weight:700;">${t}</td>
-      ${[0,1,2,3,4].map(i => `<td><input type="text" id="dm-${t}-${i}" value="${picks[i]||''}" style="width:90px;padding:4px 6px;font-size:12px;" placeholder="Player"></td>`).join('')}
-    </tr>`;
-  }).join('');
+  dallyBody.innerHTML = TIPPERS.map(t =>
+    `<tr><td style="font-weight:700;">${t}</td>
+     <td><input type="text" id="dm-${t}" value="${dallyPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Player name"></td></tr>`
+  ).join('');
 
-  // Coach rows
+  // Coach picks
   const coachBody = document.getElementById('coach-input-rows');
   coachBody.innerHTML = TIPPERS.map(t =>
     `<tr><td style="font-weight:700;">${t}</td>
      <td><input type="text" id="coach-${t}" value="${coachPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Coach/Team"></td></tr>`
   ).join('');
 
-  // Ladder rows
+  // Ladder picks
   const ladderBody = document.getElementById('ladder-input-rows');
   ladderBody.innerHTML = LADDER_POSITIONS.map((pos, idx) =>
     `<tr><td><strong>${pos}</strong></td>
@@ -1629,7 +1649,7 @@ function buildSeasonBetsForm() {
     </tr>`
   ).join('');
 
-  // Result ladder dropdowns
+  // Result fields
   const resultLadder = document.getElementById('sb-result-ladder');
   resultLadder.innerHTML = LADDER_POSITIONS.map((pos, idx) =>
     `<div><label style="font-size:11px;">${pos}</label>
@@ -1639,7 +1659,6 @@ function buildSeasonBetsForm() {
     </select></div>`
   ).join('');
 
-  // Dally M results
   ['dallym1','dallym2','dallym3','dallym4','dallym5','coach'].forEach(key => {
     const el = document.getElementById(`sb-result-${key}`);
     if (el) el.value = results[key] || '';
@@ -1648,30 +1667,20 @@ function buildSeasonBetsForm() {
 
 function saveSeasonBets() {
   if (!appData.seasonBets) appData.seasonBets = {};
-  if (!appData.seasonBets.results) appData.seasonBets.results = {};
 
-  // Dally M picks
+  // Dally M — one pick per tipper
   const dallyM = {};
-  TIPPERS.forEach(t => {
-    dallyM[t] = [0,1,2,3,4].map(i => document.getElementById(`dm-${t}-${i}`)?.value.trim() || '');
-  });
+  TIPPERS.forEach(t => { dallyM[t] = document.getElementById(`dm-${t}`)?.value.trim() || ''; });
   appData.seasonBets.dallyM = dallyM;
 
-  // Coach picks
   const coach = {};
-  TIPPERS.forEach(t => {
-    coach[t] = document.getElementById(`coach-${t}`)?.value.trim() || '';
-  });
+  TIPPERS.forEach(t => { coach[t] = document.getElementById(`coach-${t}`)?.value.trim() || ''; });
   appData.seasonBets.coach = coach;
 
-  // Ladder picks
   const ladder = {};
-  TIPPERS.forEach(t => {
-    ladder[t] = LADDER_POSITIONS.map((_, idx) => document.getElementById(`lad-${t}-${idx}`)?.value || '');
-  });
+  TIPPERS.forEach(t => { ladder[t] = LADDER_POSITIONS.map((_, idx) => document.getElementById(`lad-${t}-${idx}`)?.value || ''); });
   appData.seasonBets.ladder = ladder;
 
-  // Results
   appData.seasonBets.results = {
     dallym1: document.getElementById('sb-result-dallym1')?.value.trim() || '',
     dallym2: document.getElementById('sb-result-dallym2')?.value.trim() || '',

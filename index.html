@@ -2016,13 +2016,12 @@ const DEFAULT_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzYmW_b26gtE
 
 (async function init() {
   loadFromStorage();
-  // Ensure Sheets mode is always active (even for first-time visitors)
+  // Always force Sheets mode — this is the single source of truth
   if (!appData.config) appData.config = {};
-  if (!appData.config.sheetsUrl) appData.config.sheetsUrl = DEFAULT_SHEETS_URL;
-  if (!appData.config.mode) appData.config.mode = 'sheets';
+  appData.config.sheetsUrl = DEFAULT_SHEETS_URL;
+  appData.config.mode = 'sheets';
   restoreConfigFields();
   showLoadingState();
-  // Always try to load from Sheets
   await loadFromSheets();
   renderLeaderboard();
 })();

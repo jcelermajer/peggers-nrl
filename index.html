@@ -287,6 +287,7 @@
     <button onclick="showView('rounds')">Rounds</button>
     <button onclick="showView('rules')">Rules</button>
     <button onclick="showView('seasonbets')">Season Bets</button>
+    <button onclick="showView('lms')">Last Man Standing</button>
     <button class="admin-btn" onclick="showView('admin')">Admin</button>
   </nav>
 </header>
@@ -521,7 +522,7 @@
 
     <div class="card">
       <div class="card-title">🔥 First Coach Down</div>
-      <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>5 points</strong>.</p>
+      <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>3 points</strong>.</p>
     </div>
 
     <div class="card">
@@ -655,6 +656,52 @@
       </div>
 
       <button class="btn" onclick="saveSeasonBets()">Save Season Bets</button>
+    </div>
+  </div>
+</div>
+
+<div id="view-lms" class="view">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+    <div class="section-title">Last Man <span>Standing</span></div>
+    <div id="lms-edit-btn" style="display:none;">
+      <button class="admin-btn btn btn-sm" onclick="toggleLmsAdmin()">✏️ Enter LMS Picks</button>
+    </div>
+  </div>
+
+  <!-- Status cards -->
+  <div id="lms-status-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px;"></div>
+
+  <!-- Round grid -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">Round by Round</div>
+    <div class="table-wrap">
+      <table id="lms-grid-table">
+        <thead id="lms-grid-head"></thead>
+        <tbody id="lms-grid-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Used teams -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">🚫 Used Teams</div>
+    <div id="lms-used-teams"></div>
+  </div>
+
+  <!-- Admin entry -->
+  <div id="lms-admin-panel" style="display:none;">
+    <div class="card">
+      <div class="card-title">✏️ Enter LMS Picks</div>
+      <div class="form-group">
+        <label>Round</label>
+        <select id="lms-round-select" onchange="loadLmsForm()">
+          <option value="">-- Select Round --</option>
+        </select>
+      </div>
+      <div id="lms-entry-form"></div>
+      <div id="lms-save-btn" style="display:none;margin-top:16px;">
+        <button class="btn" onclick="saveLmsPicks()">Save LMS Picks</button>
+      </div>
     </div>
   </div>
 </div>
@@ -885,6 +932,14 @@ function buildLeaderboard() {
   const weekScore = {};
   TIPPERS.forEach(t => weekScore[t] = rounds[n-1].scores[t] || 0);
 
+  // Add LMS points to totals
+  TIPPERS.forEach(t => {
+    const lmsPts = getLmsTotalPoints(t);
+    totals[t] += lmsPts;
+    // Also add to cumulative last entry
+    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts;
+  });
+
   return ranked.map(tipper => ({
     tipper,
     rank: rankMap[tipper],
@@ -914,6 +969,7 @@ function renderView(name) {
   if (name === 'dashboard') renderDashboard();
   if (name === 'rounds') renderRounds();
   if (name === 'seasonbets') renderSeasonBets();
+  if (name === 'lms') renderLms();
   if (name === 'admin') renderAdmin();
 }
 
@@ -1169,6 +1225,7 @@ function renderAdmin() {
     document.getElementById('admin-password-screen').style.display = 'none';
     document.getElementById('admin-panel').style.display = 'block';
     document.getElementById('season-bets-edit-btn').style.display = 'inline-block';
+    document.getElementById('lms-edit-btn').style.display = 'block';
     populateAdminRoundSelects();
     renderGamesList();
   }
@@ -1465,6 +1522,222 @@ function showAlert(msg, type) {
   div.textContent = msg;
   document.body.appendChild(div);
   setTimeout(() => div.remove(), 3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// LAST MAN STANDING
+// ═══════════════════════════════════════════════════════
+
+function getLmsData() {
+  return appData.lms || {};
+}
+
+function getLmsTipperStatus(tipper) {
+  // Returns { alive: bool, points: int, usedTeams: [], rounds: {roundId: {pick, result}} }
+  const lms = getLmsData();
+  const status = { alive: true, points: 0, usedTeams: [], rounds: {} };
+  
+  // Get all LMS rounds in order
+  const lmsRounds = appData.rounds.filter(r => lms[r.id]);
+  lmsRounds.forEach(round => {
+    const entry = lms[round.id] && lms[round.id][tipper];
+    if (!entry) return;
+    status.rounds[round.id] = entry;
+    if (entry.pick) status.usedTeams.push(entry.pick);
+    if (!status.alive) return; // already eliminated
+    if (entry.result === 'correct') status.points++;
+    else if (entry.result === 'wrong') status.alive = false;
+  });
+  return status;
+}
+
+function renderLms() {
+  if (adminUnlocked) {
+    document.getElementById('lms-edit-btn').style.display = 'block';
+    populateLmsRoundSelect();
+  }
+
+  const lms = getLmsData();
+  const lmsRounds = appData.rounds.filter(r => lms[r.id] || r.id); // show all rounds from R6 onwards that have LMS data
+  const lmsRoundsWithData = appData.rounds.filter(r => lms[r.id]);
+
+  // Status cards
+  const cardsDiv = document.getElementById('lms-status-cards');
+  cardsDiv.innerHTML = TIPPERS.map(t => {
+    const status = getLmsTipperStatus(t);
+    const borderColor = status.alive ? 'var(--green)' : 'var(--border)';
+    const statusLabel = status.alive ? '✅ Alive' : '❌ Out';
+    const statusColor = status.alive ? 'var(--green)' : 'var(--red)';
+    return `<div style="background:var(--surface);border:1px solid ${borderColor};border-radius:10px;padding:14px;text-align:center;">
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:700;text-transform:uppercase;">${t}</div>
+      <div style="font-size:12px;color:${statusColor};margin-top:4px;font-weight:700;">${statusLabel}</div>
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);margin-top:4px;">${status.points}</div>
+      <div style="font-size:11px;color:var(--muted);">pts</div>
+    </div>`;
+  }).join('');
+
+  // Round grid
+  const thead = document.getElementById('lms-grid-head');
+  const tbody = document.getElementById('lms-grid-body');
+
+  if (lmsRoundsWithData.length === 0) {
+    thead.innerHTML = '<tr><th>Round</th>' + TIPPERS.map(t => `<th style="font-size:11px;">${t.substring(0,5)}</th>`).join('') + '</tr>';
+    tbody.innerHTML = `<tr><td colspan="${TIPPERS.length+1}" class="empty-state" style="padding:30px;text-align:center;color:var(--muted);">No LMS rounds entered yet. Starts from Round 6.</td></tr>`;
+  } else {
+    thead.innerHTML = '<tr><th>Round</th>' + TIPPERS.map(t => `<th style="font-size:11px;">${t.substring(0,5)}</th>`).join('') + '<th>Active</th></tr>';
+    
+    // Track alive status as we go
+    const alive = {};
+    TIPPERS.forEach(t => alive[t] = true);
+
+    tbody.innerHTML = lmsRoundsWithData.map(round => {
+      const roundLms = lms[round.id] || {};
+      let activeCount = 0;
+      const cells = TIPPERS.map(t => {
+        const entry = roundLms[t];
+        if (!alive[t]) return '<td style="color:var(--border);">–</td>';
+        if (!entry || !entry.pick) return '<td style="color:var(--muted);">–</td>';
+        
+        let bg = '', label = entry.pick;
+        if (entry.result === 'correct') { bg = 'color:var(--green);font-weight:700;'; activeCount++; }
+        else if (entry.result === 'wrong') { bg = 'color:var(--red);'; alive[t] = false; }
+        else { activeCount++; } // pending result
+        
+        return `<td style="font-size:11px;${bg}">${label}</td>`;
+      });
+
+      // Update alive after processing wrong results
+      TIPPERS.forEach(t => {
+        const entry = roundLms[t];
+        if (entry && entry.result === 'wrong') alive[t] = false;
+      });
+
+      return `<tr>
+        <td style="font-weight:700;white-space:nowrap;">${round.name}</td>
+        ${cells.join('')}
+        <td style="color:var(--accent2);font-weight:700;">${activeCount}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Points row
+  if (lmsRoundsWithData.length > 0) {
+    const ptRow = document.createElement('tr');
+    ptRow.style.borderTop = '2px solid var(--border)';
+    ptRow.innerHTML = '<td><strong>Pts</strong></td>' +
+      TIPPERS.map(t => {
+        const s = getLmsTipperStatus(t);
+        return `<td><strong style="color:var(--accent);">${s.points}</strong></td>`;
+      }).join('') + '<td></td>';
+    document.getElementById('lms-grid-body').appendChild(ptRow);
+  }
+
+  // Used teams
+  const usedDiv = document.getElementById('lms-used-teams');
+  usedDiv.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;">' +
+    TIPPERS.map(t => {
+      const status = getLmsTipperStatus(t);
+      const used = status.usedTeams;
+      return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div style="font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase;width:80px;">${t}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          ${used.length > 0 
+            ? used.map(team => `<span class="team-badge" style="text-decoration:line-through;opacity:0.6;">${team}</span>`).join('')
+            : '<span style="color:var(--muted);font-size:12px;">None used</span>'}
+        </div>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+function toggleLmsAdmin() {
+  const panel = document.getElementById('lms-admin-panel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+}
+
+function populateLmsRoundSelect() {
+  const sel = document.getElementById('lms-round-select');
+  sel.innerHTML = '<option value="">-- Select Round --</option>' +
+    appData.rounds.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
+}
+
+function loadLmsForm() {
+  const idx = document.getElementById('lms-round-select').value;
+  const form = document.getElementById('lms-entry-form');
+  const saveBtn = document.getElementById('lms-save-btn');
+  if (idx === '') { form.innerHTML = ''; saveBtn.style.display = 'none'; return; }
+
+  const round = appData.rounds[idx];
+  const lms = getLmsData();
+  const existing = (lms[round.id] || {});
+
+  // Figure out who is still alive going into this round
+  const lmsRoundsBefore = appData.rounds.slice(0, parseInt(idx)).filter(r => lms[r.id]);
+  const aliveMap = {};
+  TIPPERS.forEach(t => aliveMap[t] = true);
+  lmsRoundsBefore.forEach(r => {
+    TIPPERS.forEach(t => {
+      const e = lms[r.id] && lms[r.id][t];
+      if (e && e.result === 'wrong') aliveMap[t] = false;
+    });
+  });
+
+  // Used teams per tipper
+  const usedMap = {};
+  TIPPERS.forEach(t => {
+    usedMap[t] = [];
+    lmsRoundsBefore.forEach(r => {
+      const e = lms[r.id] && lms[r.id][t];
+      if (e && e.pick) usedMap[t].push(e.pick);
+    });
+  });
+
+  let html = '<div style="margin-top:12px;">';
+  TIPPERS.forEach(t => {
+    const alive = aliveMap[t];
+    const used = usedMap[t];
+    const ex = existing[t] || {};
+    const availableTeams = TEAM_LIST.filter(tm => !used.includes(tm.code));
+
+    html += `<div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+      <div style="font-family:var(--font-display);font-weight:700;font-size:14px;text-transform:uppercase;${!alive?'opacity:0.4;':''}">${t}${!alive?' ❌':''}</div>
+      <select id="lms-pick-${t}" ${!alive?'disabled':''} style="padding:6px;font-size:13px;">
+        <option value="">– No pick –</option>
+        ${availableTeams.map(tm => `<option value="${tm.code}" ${ex.pick===tm.code?'selected':''}>${tm.name} (${tm.code})</option>`).join('')}
+      </select>
+      <select id="lms-result-${t}" ${!alive?'disabled':''} style="padding:6px;font-size:13px;">
+        <option value="" ${!ex.result?'selected':''}>– Pending –</option>
+        <option value="correct" ${ex.result==='correct'?'selected':''}>✅ Correct</option>
+        <option value="wrong" ${ex.result==='wrong'?'selected':''}>❌ Wrong / Out</option>
+      </select>
+    </div>`;
+  });
+  html += '</div>';
+
+  form.innerHTML = html;
+  saveBtn.style.display = 'block';
+}
+
+function saveLmsPicks() {
+  const idx = document.getElementById('lms-round-select').value;
+  if (idx === '') return;
+  const round = appData.rounds[idx];
+  if (!appData.lms) appData.lms = {};
+
+  const roundData = {};
+  TIPPERS.forEach(t => {
+    const pick = document.getElementById(`lms-pick-${t}`)?.value || '';
+    const result = document.getElementById(`lms-result-${t}`)?.value || '';
+    if (pick || result) roundData[t] = { pick, result };
+  });
+
+  appData.lms[round.id] = roundData;
+  saveToStorage();
+  renderLms();
+  showAlert('LMS picks saved!', 'success');
+}
+
+function getLmsTotalPoints(tipper) {
+  return getLmsTipperStatus(tipper).points;
 }
 
 // ═══════════════════════════════════════════════════════

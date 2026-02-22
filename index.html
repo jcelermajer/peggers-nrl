@@ -513,11 +513,24 @@
       <div class="card-title">🏆 Last Man Standing</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:8px;">
         <li>From <strong>Round 6</strong>, each tipper makes an additional tip on a team they are confident will win from any game that round.</li>
-        <li>Correct → progress. Wrong → you're out.</li>
-        <li>You <strong>cannot tip the same team again</strong> for the rest of the competition. 16 teams, 16 weeks. Tip must be in before kickoff of the relevant game. Breaking either rule = <strong>DQ</strong>.</li>
-        <li>Tie breaks settled by the player who has previously tipped the lowest placed team on the NRL ladder and won.</li>
-        <li>Points: <strong>1st gets 16, 2nd gets 15 … 16th gets 1.</strong></li>
+        <li>Correct → survive and earn points. Wrong or DQ → you're out.</li>
+        <li>You <strong>cannot tip the same team again</strong> for the rest of the competition. Tip must be in before kickoff of the relevant game. Breaking either rule = <strong>DQ</strong>.</li>
+        <li>Points escalate as the season goes on:</li>
       </ul>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;">
+        <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">1pt</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Rounds 6–11</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">2pts</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Rounds 12–17</div>
+        </div>
+        <div style="background:var(--surface2);border-radius:8px;padding:14px;text-align:center;">
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">3pts</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Rounds 18–23</div>
+        </div>
+      </div>
     </div>
 
     <div class="card">
@@ -1532,6 +1545,15 @@ function getLmsData() {
   return appData.lms || {};
 }
 
+function getLmsPointValue(roundName) {
+  const match = roundName.match(/Rd\s*(\d+)/i);
+  if (!match) return 1;
+  const num = parseInt(match[1]);
+  if (num >= 18) return 3;
+  if (num >= 12) return 2;
+  return 1;
+}
+
 function getLmsTipperStatus(tipper) {
   // Returns { alive: bool, points: int, usedTeams: [], rounds: {roundId: {pick, result}} }
   const lms = getLmsData();
@@ -1545,7 +1567,7 @@ function getLmsTipperStatus(tipper) {
     status.rounds[round.id] = entry;
     if (entry.pick) status.usedTeams.push(entry.pick);
     if (!status.alive) return; // already eliminated
-    if (entry.result === 'correct') status.points++;
+    if (entry.result === 'correct') status.points += getLmsPointValue(round.name);
     else if (entry.result === 'wrong') status.alive = false;
   });
   return status;

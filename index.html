@@ -2011,16 +2011,19 @@ function saveSeasonBets() {
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-// ── INIT ──
-// Always load config from local storage first (so we know the Sheets URL)
-// Then always fetch live data from Sheets before rendering anything
+// Default Sheets URL — all visitors auto-load from this
+const DEFAULT_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzYmW_b26gtEMsxCHxhFb6mUbVCDX7ukwTIu9RYcKLUpT2rR_C_0wLsQkhA7HL8a-Mz/exec';
+
 (async function init() {
   loadFromStorage();
+  // Ensure Sheets mode is always active (even for first-time visitors)
+  if (!appData.config) appData.config = {};
+  if (!appData.config.sheetsUrl) appData.config.sheetsUrl = DEFAULT_SHEETS_URL;
+  if (!appData.config.mode) appData.config.mode = 'sheets';
   restoreConfigFields();
   showLoadingState();
-  if (appData.config && appData.config.mode === 'sheets' && appData.config.sheetsUrl) {
-    await loadFromSheets();
-  }
+  // Always try to load from Sheets
+  await loadFromSheets();
   renderLeaderboard();
 })();
 

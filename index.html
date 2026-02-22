@@ -535,7 +535,7 @@
 
     <div class="card">
       <div class="card-title">🔥 First Coach Down</div>
-      <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>3 points</strong>.</p>
+      <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>5 points</strong>.</p>
     </div>
 
     <div class="card">
@@ -1816,7 +1816,7 @@ function renderSeasonBets() {
   }
   if (hasCoach) {
     TIPPERS.forEach(t => {
-      if ((coachPicks[t] || '').toLowerCase().trim() === coachResult) coachScores[t] = 3;
+      if ((coachPicks[t] || '').toLowerCase().trim() === coachResult) coachScores[t] = 5;
     });
   }
   if (hasLadder) {
@@ -1855,7 +1855,7 @@ function renderSeasonBets() {
   html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:4px;background:var(--border);"></td></tr>`;
 
   // First Coach row
-  html += '<tr style="background:rgba(239,68,68,0.05)"><td><strong style="color:var(--red);">🔥 First Coach</strong><br><small style="color:var(--muted);">3 pts</small></td>';
+  html += '<tr style="background:rgba(239,68,68,0.05)"><td><strong style="color:var(--red);">🔥 First Coach</strong><br><small style="color:var(--muted);">5 pts</small></td>';
   TIPPERS.forEach(t => {
     const pick = coachPicks[t] || '–';
     const correct = hasCoach && (pick.toLowerCase().trim() === coachResult);

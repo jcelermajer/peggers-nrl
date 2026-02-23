@@ -883,13 +883,15 @@ function calculateRoundScores(round) {
     });
   });
 
-  // Perfect round bonus
-  TIPPERS.forEach(tipper => {
-    const allPlayed = round.games.every((g, i) => round.results[i] && round.results[i].winner);
-    if (allPlayed && perfect[tipper]) {
-      scores[tipper] += 1 * multiplier;
-    }
-  });
+  // Perfect round bonus (not for Vegas or Origin — too few games)
+  if (round.type !== 'vegas' && round.type !== 'origin') {
+    TIPPERS.forEach(tipper => {
+      const allPlayed = round.games.every((g, i) => round.results[i] && round.results[i].winner);
+      if (allPlayed && perfect[tipper]) {
+        scores[tipper] += 1 * multiplier;
+      }
+    });
+  }
 
   return scores;
 }

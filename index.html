@@ -279,7 +279,7 @@
 
 <header>
   <div class="header-top">
-    <div class="logo">Pegger's <span>Tipping</span> 2026<small>brought to you by James' Royal Pies 🥛🥧</small></div>
+    <div class="logo">Pegger's <span>Tipping</span> 2026<small>brought to you by James' Royal Pies 🤴🥧</small></div>
   </div>
   <nav>
     <button class="active" onclick="showView('leaderboard')">Leaderboard</button>
@@ -288,7 +288,7 @@
     <button onclick="showView('rules')">Rules</button>
     <button onclick="showView('seasonbets')">Season Bets</button>
     <button onclick="showView('lms')">Last Man Standing</button>
-    <button class="admin-btn" onclick="showView('admin')">Admin</button>
+    <button class="admin-btn" onclick="showView('admin')">Board Access Only</button>
   </nav>
 </header>
 
@@ -322,14 +322,11 @@
 
 <div id="view-dashboard" class="view">
   <div class="section-title" style="margin-bottom:24px;">Dashboard <span>Overview</span></div>
-
   <div class="dash-grid" id="stat-cards"></div>
-
   <div class="card">
     <div class="card-title">Top 3 Podium</div>
     <div class="podium" id="podium"></div>
   </div>
-
   <div class="card">
     <div class="card-title">Score Progression (Cumulative)</div>
     <canvas id="progressChart" height="300"></canvas>
@@ -364,7 +361,6 @@
     </div>
 
     <div class="admin-grid">
-      <!-- Left: Sheets Config + Round Setup -->
       <div>
         <div class="card">
           <div class="card-title">Google Sheets Config</div>
@@ -416,7 +412,6 @@
         </div>
       </div>
 
-      <!-- Right: Enter Tips + Results -->
       <div>
         <div class="card">
           <div class="card-title">Enter Tips</div>
@@ -463,9 +458,7 @@
 
 <div id="view-rules" class="view">
   <div class="section-title" style="margin-bottom:32px;">Competition <span>Rules</span></div>
-
   <div style="max-width:720px;display:flex;flex-direction:column;gap:20px;">
-
     <div class="card">
       <div class="card-title">💰 Prize Money</div>
       <table style="width:100%;">
@@ -474,13 +467,11 @@
         <tr><td style="padding:6px 0;">All other losers</td><td style="padding:6px 0;color:var(--muted);">$0</td></tr>
       </table>
     </div>
-
     <div class="card">
       <div class="card-title">🎲 Multis</div>
       <p style="line-height:1.8;font-size:14px;color:var(--text);">Each week the previous week's highest tipper can bet a $20 NRL (+Origin) multi, with all profits to go to end of season dinner.</p>
       <p style="line-height:1.8;font-size:14px;color:var(--muted);margin-top:8px;">Closest margin bet is the tie-breaker for multi bet the following week, in case of a tie.</p>
     </div>
-
     <div class="card">
       <div class="card-title">🏉 Season Leaderboard</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
@@ -489,17 +480,15 @@
         <li>❌ If you tip against your team and they win, you <strong>lose a point</strong>.</li>
       </ul>
     </div>
-
     <div class="card">
       <div class="card-title">📐 Margin</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
         <li>🌙 The <strong>late Friday night game</strong> each week will be the margin game.</li>
         <li>🎯 An exact margin is a <strong>bonus 3 points</strong>.</li>
-        <li>📊 Cumulative lowest margin score over the season worth <strong>10 points</strong> to the winner.</li>
+        <li>📊 Cumulative lowest margin score over the season worth <strong>3 points</strong> to the winner.</li>
         <li>🔗 Closest to margin breaks tie-break for NRL multi bet the following week.</li>
       </ul>
     </div>
-
     <div class="card">
       <div class="card-title">✨ Bonus Rounds</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
@@ -508,7 +497,6 @@
         <li><span class="magic-badge">3×</span> &nbsp;<strong>Magic Round</strong> tips will be worth triple points.</li>
       </ul>
     </div>
-
     <div class="card">
       <div class="card-title">🏆 Last Man Standing</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:8px;">
@@ -532,12 +520,10 @@
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-title">🔥 First Coach Down</div>
       <p style="font-size:14px;line-height:1.8;">First coach fired is worth <strong>5 points</strong>.</p>
     </div>
-
     <div class="card">
       <div class="card-title">🌟 Dally M</div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:4px;">
@@ -550,7 +536,7 @@
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">2nd</div>
         </div>
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
-          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">4</div>
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);">3</div>
           <div style="font-size:11px;color:var(--muted);margin-top:2px;">3rd</div>
         </div>
         <div style="text-align:center;background:var(--surface2);border-radius:8px;padding:12px;">
@@ -563,7 +549,6 @@
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="card-title">🪜 Ladder</div>
       <ul style="line-height:2;font-size:14px;list-style:none;display:flex;flex-direction:column;gap:6px;">
@@ -572,7 +557,6 @@
         <li>🎯 Total of <strong>34 points</strong> on offer — choose wisely!</li>
       </ul>
     </div>
-
   </div>
 </div>
 
@@ -581,24 +565,17 @@
     <div class="section-title">Season <span>Bets</span></div>
     <button class="admin-btn btn btn-sm" onclick="showSeasonBetsAdmin()" id="season-bets-edit-btn" style="display:none;">✏️ Edit Picks</button>
   </div>
-
-  <!-- Supported Teams -->
   <div class="card" style="margin-bottom:20px;">
     <div class="card-title">🏉 Supported Teams</div>
     <div id="sb-teams-display"></div>
   </div>
-
-  <!-- Combined: Dally M + Coach + Ladder -->
   <div class="card" style="margin-bottom:20px;">
     <div class="card-title">🌟 Dally M · 🔥 First Coach · 🪜 Ladder</div>
     <div id="sb-combined-display"></div>
   </div>
-
-  <!-- Admin entry panel (hidden by default) -->
   <div id="season-bets-admin" style="display:none;">
     <div class="card" style="margin-bottom:20px;">
       <div class="card-title">✏️ Enter Season Bets Data</div>
-
       <div style="margin-bottom:24px;">
         <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">Dally M Picks (one pick per tipper)</div>
         <div class="table-wrap">
@@ -608,7 +585,6 @@
           </table>
         </div>
       </div>
-
       <div style="margin-bottom:24px;">
         <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">First Coach Fired (pick per tipper)</div>
         <div class="table-wrap">
@@ -618,7 +594,6 @@
           </table>
         </div>
       </div>
-
       <div style="margin-bottom:24px;">
         <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">Ladder Predictions (1st to 17th)</div>
         <div class="table-wrap">
@@ -633,41 +608,21 @@
           </table>
         </div>
       </div>
-
       <div style="margin-bottom:24px;">
         <div style="font-weight:700;margin-bottom:12px;font-size:14px;color:var(--accent2);">Actual Results (enter when known)</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;flex-wrap:wrap;">
-          <div class="form-group">
-            <label>Dally M Winner (1st)</label>
-            <input type="text" id="sb-result-dallym1" placeholder="Player name">
-          </div>
-          <div class="form-group">
-            <label>Dally M 2nd</label>
-            <input type="text" id="sb-result-dallym2" placeholder="Player name">
-          </div>
-          <div class="form-group">
-            <label>Dally M 3rd</label>
-            <input type="text" id="sb-result-dallym3" placeholder="Player name">
-          </div>
-          <div class="form-group">
-            <label>Dally M 4th</label>
-            <input type="text" id="sb-result-dallym4" placeholder="Player name">
-          </div>
-          <div class="form-group">
-            <label>Dally M 5th</label>
-            <input type="text" id="sb-result-dallym5" placeholder="Player name">
-          </div>
-          <div class="form-group">
-            <label>First Coach Fired</label>
-            <input type="text" id="sb-result-coach" placeholder="Coach / Team name">
-          </div>
+          <div class="form-group"><label>Dally M Winner (1st)</label><input type="text" id="sb-result-dallym1" placeholder="Player name"></div>
+          <div class="form-group"><label>Dally M 2nd</label><input type="text" id="sb-result-dallym2" placeholder="Player name"></div>
+          <div class="form-group"><label>Dally M 3rd</label><input type="text" id="sb-result-dallym3" placeholder="Player name"></div>
+          <div class="form-group"><label>Dally M 4th</label><input type="text" id="sb-result-dallym4" placeholder="Player name"></div>
+          <div class="form-group"><label>Dally M 5th</label><input type="text" id="sb-result-dallym5" placeholder="Player name"></div>
+          <div class="form-group"><label>First Coach Fired</label><input type="text" id="sb-result-coach" placeholder="Coach / Team name"></div>
         </div>
         <div style="margin-top:8px;">
           <div style="font-weight:700;margin-bottom:8px;font-size:13px;color:var(--muted);">Final Ladder (1st to 17th)</div>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;" id="sb-result-ladder"></div>
         </div>
       </div>
-
       <button class="btn" onclick="saveSeasonBets()">Save Season Bets</button>
     </div>
   </div>
@@ -680,11 +635,7 @@
       <button class="admin-btn btn btn-sm" onclick="toggleLmsAdmin()">✏️ Enter LMS Picks</button>
     </div>
   </div>
-
-  <!-- Status cards -->
   <div id="lms-status-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:24px;"></div>
-
-  <!-- Round grid -->
   <div class="card" style="margin-bottom:20px;">
     <div class="card-title">Round by Round</div>
     <div class="table-wrap">
@@ -694,14 +645,10 @@
       </table>
     </div>
   </div>
-
-  <!-- Used teams -->
   <div class="card" style="margin-bottom:20px;">
     <div class="card-title">🚫 Used Teams</div>
     <div id="lms-used-teams"></div>
   </div>
-
-  <!-- Admin entry -->
   <div id="lms-admin-panel" style="display:none;">
     <div class="card">
       <div class="card-title">✏️ Enter LMS Picks</div>
@@ -724,7 +671,7 @@
 // ═══════════════════════════════════════════════════════
 // CONFIG
 // ═══════════════════════════════════════════════════════
-const ADMIN_PASSWORD = 'nrl2025'; // Change this!
+const ADMIN_PASSWORD = 'nrl2025';
 
 const TIPPERS = ['Anish','Bev','David','George','Jacob','James','Jeremy','Jordan','Julian','Manettas','Pat','Phil','Ringo','Simon','Richard','Tim'];
 
@@ -732,7 +679,7 @@ const TIPPER_TEAMS = {
   'Anish': 'CB', 'Bev': 'SG', 'David': 'SR', 'George': 'RD',
   'Jacob': 'SS', 'James': 'SR', 'Jeremy': 'CB', 'Jordan': 'CB',
   'Julian': 'CB', 'Manettas': 'SE', 'Pat': 'CS', 'Phil': 'SE',
-  'Ringo': 'BB', 'Simon': 'WT', 'Richard': 'NK', 'Tim': 'NK'
+  'Ringo': 'BB', 'Simon': 'WT', 'Richard': 'CS', 'Tim': 'NK'
 };
 
 const TEAMS = {
@@ -751,14 +698,13 @@ function getTeamListForType(type) {
   return type === 'origin' ? ORIGIN_TEAM_LIST : TEAM_LIST;
 }
 
-// Power ranking weights
 const POWER_WEIGHTS = { rank: 0.5, change1: 0.3, change5: 0.2 };
 
 // ═══════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════
 let appData = {
-  rounds: [],      // [{id, name, type, games, tips, results, scores}]
+  rounds: [],
   config: { mode: 'local', sheetsUrl: '' }
 };
 
@@ -766,7 +712,7 @@ let adminUnlocked = false;
 let progressChart = null;
 
 // ═══════════════════════════════════════════════════════
-// STORAGE — local fallback + Google Sheets
+// STORAGE — local fallback + Google Sheets (POST-based)
 // ═══════════════════════════════════════════════════════
 function saveToStorage() {
   localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
@@ -785,32 +731,44 @@ function loadFromStorage() {
 async function saveToSheets() {
   if (!appData.config.sheetsUrl) return;
   try {
-    const encoded = encodeURIComponent(JSON.stringify(appData));
-    await fetch(appData.config.sheetsUrl + '?action=save&data=' + encoded);
+    const payload = JSON.stringify({ action: 'save', data: appData });
+    const res = await fetch(appData.config.sheetsUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: payload,
+      redirect: 'follow'
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const result = await res.json();
+    if (result.error) throw new Error(result.error);
+    console.log('✅ Sheets save successful');
   } catch(e) {
-    console.warn('Sheets save failed:', e);
+    console.warn('❌ Sheets save failed:', e);
+    showAlert('Sheets save failed: ' + e.message, 'error');
   }
 }
 
 async function loadFromSheets() {
   if (!appData.config || appData.config.mode !== 'sheets' || !appData.config.sheetsUrl) return;
   try {
-    const url = appData.config.sheetsUrl + '?action=load&t=' + Date.now(); // cache-bust
-    const res = await fetch(url);
+    const url = appData.config.sheetsUrl + '?action=load&t=' + Date.now();
+    const res = await fetch(url, { redirect: 'follow' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const text = await res.text();
     let data;
     try { data = JSON.parse(text); } catch(e) { throw new Error('Invalid JSON from Sheets'); }
+    if (data && data.error) throw new Error('Apps Script error: ' + data.error);
     if (data && Array.isArray(data.rounds)) {
-      const localConfig = appData.config; // always preserve local config
+      const localConfig = appData.config;
       appData = data;
       appData.config = localConfig;
       localStorage.setItem('nrl_tipping_2026', JSON.stringify(appData));
+      console.log('✅ Sheets load successful —', data.rounds.length, 'rounds loaded');
+    } else {
+      console.warn('⚠️ Sheets returned data but no rounds array:', Object.keys(data || {}));
     }
-    // silently succeed — no alert on auto-load, only on manual sync
   } catch(e) {
-    console.warn('Sheets load failed:', e.message);
-    // fall through to local storage data — no alert so casual visitors don't see errors
+    console.warn('❌ Sheets load failed:', e.message);
   }
 }
 
@@ -821,7 +779,10 @@ async function manualSyncFromSheets() {
   showAlert('Syncing...', 'success');
   await loadFromSheets();
   renderLeaderboard();
-  showAlert('Sync complete!', 'success');
+  const roundCount = appData.rounds ? appData.rounds.length : 0;
+  const hasSeasonBets = appData.seasonBets && Object.keys(appData.seasonBets).length > 0;
+  const hasLms = appData.lms && Object.keys(appData.lms).length > 0;
+  showAlert(`Sync complete! ${roundCount} rounds, season bets: ${hasSeasonBets ? '✓' : '✗'}, LMS: ${hasLms ? '✓' : '✗'}`, 'success');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -830,32 +791,27 @@ async function manualSyncFromSheets() {
 function calculateRoundScores(round) {
   const scores = {};
   TIPPERS.forEach(t => scores[t] = 0);
-
   if (!round.results || !round.tips) return scores;
 
   const isOrigin = round.type === 'origin';
   const multiplier = round.type === 'magic' ? 3 : round.type === 'vegas' ? 2 : 1;
 
-  // Track perfect round per tipper
   const perfect = {};
   TIPPERS.forEach(t => perfect[t] = true);
 
   round.games.forEach((game, idx) => {
     const result = round.results[idx];
-    if (!result || !result.winner) return; // not yet played
+    if (!result || !result.winner) return;
 
-    const isMarginGame = game.isMarginGame || isOrigin; // Origin always has margin
+    const isMarginGame = game.isMarginGame || isOrigin;
     const actualMargin = parseInt(result.margin) || 0;
 
     TIPPERS.forEach(tipper => {
       const tip = round.tips[tipper] && round.tips[tipper][idx];
       if (!tip) { perfect[tipper] = false; return; }
 
-      // Correct tip
       if (tip.team === result.winner) {
         scores[tipper] += isOrigin ? 2 : 1 * multiplier;
-
-        // Exact margin bonus (3pts)
         if (isMarginGame && tip.margin !== undefined && tip.margin !== '') {
           const tipMargin = parseInt(tip.margin);
           if (tipMargin === actualMargin) {
@@ -864,8 +820,6 @@ function calculateRoundScores(round) {
         }
       } else {
         perfect[tipper] = false;
-
-        // Tip against your team and they win = -1pt (NOT for Origin)
         if (!isOrigin) {
           const supportedTeam = TIPPER_TEAMS[tipper];
           if (result.winner === supportedTeam) {
@@ -883,7 +837,7 @@ function calculateRoundScores(round) {
     });
   });
 
-  // Perfect round bonus (not for Vegas or Origin — too few games)
+  // Perfect round bonus (not for Vegas or Origin)
   if (round.type !== 'vegas' && round.type !== 'origin') {
     TIPPERS.forEach(tipper => {
       const allPlayed = round.games.every((g, i) => round.results[i] && round.results[i].winner);
@@ -897,10 +851,8 @@ function calculateRoundScores(round) {
 }
 
 function buildLeaderboard() {
-  // Cumulative scores per round
   const cumulative = {};
   TIPPERS.forEach(t => cumulative[t] = []);
-
   const rounds = appData.rounds.filter(r => r.scores);
 
   rounds.forEach(round => {
@@ -913,16 +865,13 @@ function buildLeaderboard() {
   const n = rounds.length;
   if (n === 0) return [];
 
-  // Current total
   const totals = {};
   TIPPERS.forEach(t => totals[t] = cumulative[t][n-1] || 0);
 
-  // Rank by total
   const ranked = TIPPERS.slice().sort((a,b) => totals[b] - totals[a]);
   const rankMap = {};
   ranked.forEach((t, i) => rankMap[t] = i+1);
 
-  // 1-week change
   const change1 = {};
   if (n >= 2) {
     const prevTotals = {};
@@ -930,12 +879,11 @@ function buildLeaderboard() {
     const prevRanked = TIPPERS.slice().sort((a,b) => prevTotals[b] - prevTotals[a]);
     const prevRankMap = {};
     prevRanked.forEach((t, i) => prevRankMap[t] = i+1);
-    TIPPERS.forEach(t => change1[t] = prevRankMap[t] - rankMap[t]); // positive = moved up
+    TIPPERS.forEach(t => change1[t] = prevRankMap[t] - rankMap[t]);
   } else {
     TIPPERS.forEach(t => change1[t] = 0);
   }
 
-  // 5-week change
   const change5 = {};
   if (n >= 6) {
     const prev5Totals = {};
@@ -948,7 +896,6 @@ function buildLeaderboard() {
     TIPPERS.forEach(t => change5[t] = 0);
   }
 
-  // Power ranking (normalised)
   const nTippers = TIPPERS.length;
   const powerScores = {};
   TIPPERS.forEach(t => {
@@ -960,28 +907,19 @@ function buildLeaderboard() {
     powerScores[t] = rankScore * POWER_WEIGHTS.rank + c1Norm * POWER_WEIGHTS.change1 + c5Norm * POWER_WEIGHTS.change5;
   });
 
-  // Week score
   const weekScore = {};
   TIPPERS.forEach(t => weekScore[t] = rounds[n-1].scores[t] || 0);
 
-  // Add LMS points to totals
   TIPPERS.forEach(t => {
     const lmsPts = getLmsTotalPoints(t);
     totals[t] += lmsPts;
-    // Also add to cumulative last entry
     if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts;
   });
 
   return ranked.map(tipper => ({
-    tipper,
-    rank: rankMap[tipper],
-    total: totals[tipper],
-    weekScore: weekScore[tipper],
-    change1: change1[tipper],
-    change5: change5[tipper],
-    power: powerScores[tipper],
-    cumulative: cumulative[tipper],
-    team: TIPPER_TEAMS[tipper]
+    tipper, rank: rankMap[tipper], total: totals[tipper],
+    weekScore: weekScore[tipper], change1: change1[tipper], change5: change5[tipper],
+    power: powerScores[tipper], cumulative: cumulative[tipper], team: TIPPER_TEAMS[tipper]
   }));
 }
 
@@ -1011,33 +949,17 @@ function renderView(name) {
 function renderLeaderboard() {
   const lb = buildLeaderboard();
   const roundCount = appData.rounds.filter(r => r.scores).length;
-
-  document.getElementById('current-round-badge').textContent =
-    roundCount > 0 ? `After Round ${roundCount}` : 'No rounds played';
-
+  document.getElementById('current-round-badge').textContent = roundCount > 0 ? `After Round ${roundCount}` : 'No rounds played';
   const tbody = document.getElementById('leaderboard-body');
-
   if (lb.length === 0) {
     tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><div class="icon">🏉</div><p>No rounds completed yet. Enter results in Admin to see standings.</p></div></td></tr>`;
     return;
   }
-
   tbody.innerHTML = lb.map(row => {
-    const c1html = row.change1 > 0
-      ? `<span class="pos-up">▲${row.change1}</span>`
-      : row.change1 < 0
-        ? `<span class="pos-down">▼${Math.abs(row.change1)}</span>`
-        : `<span class="pos-same">–</span>`;
-
-    const c5html = row.change5 > 0
-      ? `<span class="pos-up">▲${row.change5}</span>`
-      : row.change5 < 0
-        ? `<span class="pos-down">▼${Math.abs(row.change5)}</span>`
-        : `<span class="pos-same">–</span>`;
-
+    const c1html = row.change1 > 0 ? `<span class="pos-up">▲${row.change1}</span>` : row.change1 < 0 ? `<span class="pos-down">▼${Math.abs(row.change1)}</span>` : `<span class="pos-same">–</span>`;
+    const c5html = row.change5 > 0 ? `<span class="pos-up">▲${row.change5}</span>` : row.change5 < 0 ? `<span class="pos-down">▼${Math.abs(row.change5)}</span>` : `<span class="pos-same">–</span>`;
     const rankClass = row.rank <= 3 ? `rank-${row.rank}` : '';
     const powerPct = Math.round(row.power);
-
     return `<tr>
       <td class="rank-cell ${rankClass}">${row.rank}</td>
       <td><div class="tipper-name">${row.tipper}</div></td>
@@ -1046,10 +968,7 @@ function renderLeaderboard() {
       <td class="week-score">${row.weekScore}</td>
       <td>${c1html}</td>
       <td>${c5html}</td>
-      <td>
-        <div class="power-bar"><div class="power-fill" style="width:${powerPct}%"></div></div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${powerPct}</div>
-      </td>
+      <td><div class="power-bar"><div class="power-fill" style="width:${powerPct}%"></div></div><div style="font-size:11px;color:var(--muted);margin-top:2px;">${powerPct}</div></td>
     </tr>`;
   }).join('');
 }
@@ -1060,8 +979,6 @@ function renderLeaderboard() {
 function renderDashboard() {
   const lb = buildLeaderboard();
   const rounds = appData.rounds.filter(r => r.scores);
-
-  // Stat cards
   const statCards = document.getElementById('stat-cards');
   if (lb.length === 0) {
     statCards.innerHTML = '<p style="color:var(--muted)">No data yet.</p>';
@@ -1069,80 +986,37 @@ function renderDashboard() {
     if (progressChart) { progressChart.destroy(); progressChart = null; }
     return;
   }
-
   const leader = lb[0];
   const lastRound = rounds[rounds.length-1];
   const weekLeader = lb.slice().sort((a,b) => b.weekScore - a.weekScore)[0];
-
   statCards.innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Season Leader</div>
-      <div class="stat-value">${leader.tipper}</div>
-      <div class="stat-sub">${leader.total} points</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Rounds Played</div>
-      <div class="stat-value">${rounds.length}</div>
-      <div class="stat-sub">of the 2026 season</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Last Round Best</div>
-      <div class="stat-value">${weekLeader.tipper}</div>
-      <div class="stat-sub">${weekLeader.weekScore} pts — ${lastRound ? lastRound.name : ''}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Gap to Leader</div>
-      <div class="stat-value">${lb.length > 1 ? leader.total - lb[1].total : 0}</div>
-      <div class="stat-sub">points ahead of ${lb.length > 1 ? lb[1].tipper : '—'}</div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Season Leader</div><div class="stat-value">${leader.tipper}</div><div class="stat-sub">${leader.total} points</div></div>
+    <div class="stat-card"><div class="stat-label">Rounds Played</div><div class="stat-value">${rounds.length}</div><div class="stat-sub">of the 2026 season</div></div>
+    <div class="stat-card"><div class="stat-label">Last Round Best</div><div class="stat-value">${weekLeader.tipper}</div><div class="stat-sub">${weekLeader.weekScore} pts — ${lastRound ? lastRound.name : ''}</div></div>
+    <div class="stat-card"><div class="stat-label">Gap to Leader</div><div class="stat-value">${lb.length > 1 ? leader.total - lb[1].total : 0}</div><div class="stat-sub">points ahead of ${lb.length > 1 ? lb[1].tipper : '—'}</div></div>
   `;
-
-  // Podium
   const top3 = lb.slice(0, 3);
   const podiumOrder = top3.length >= 3 ? [top3[1], top3[0], top3[2]] : top3;
   const podiumClasses = top3.length >= 3 ? ['podium-2','podium-1','podium-3'] : ['podium-1','podium-2','podium-3'];
   const podiumNums = top3.length >= 3 ? [2,1,3] : [1,2,3];
-
   document.getElementById('podium').innerHTML = podiumOrder.map((p, i) => `
-    <div class="podium-item ${podiumClasses[i]}">
-      <div class="podium-name">${p.tipper}</div>
-      <div class="podium-score">${p.total} pts</div>
-      <div class="podium-block">${podiumNums[i]}</div>
-    </div>
+    <div class="podium-item ${podiumClasses[i]}"><div class="podium-name">${p.tipper}</div><div class="podium-score">${p.total} pts</div><div class="podium-block">${podiumNums[i]}</div></div>
   `).join('');
-
-  // Progress chart
   const ctx = document.getElementById('progressChart');
   if (progressChart) { progressChart.destroy(); }
-
-  const colors = ['#f0b429','#38bdf8','#22c55e','#f87171','#a78bfa','#fb923c',
-                  '#34d399','#60a5fa','#f472b6','#facc15','#4ade80','#e879f9',
-                  '#38bdf8','#fb7185','#a3e635','#94a3b8'];
-
+  const colors = ['#f0b429','#38bdf8','#22c55e','#f87171','#a78bfa','#fb923c','#34d399','#60a5fa','#f472b6','#facc15','#4ade80','#e879f9','#38bdf8','#fb7185','#a3e635','#94a3b8'];
   const labels = rounds.map(r => r.name);
-
   const datasets = lb.map((row, i) => ({
-    label: row.tipper,
-    data: row.cumulative,
-    borderColor: colors[i % colors.length],
-    backgroundColor: 'transparent',
-    borderWidth: row.rank === 1 ? 3 : 1.5,
-    pointRadius: 3,
-    tension: 0.3
+    label: row.tipper, data: row.cumulative,
+    borderColor: colors[i % colors.length], backgroundColor: 'transparent',
+    borderWidth: row.rank === 1 ? 3 : 1.5, pointRadius: 3, tension: 0.3
   }));
-
   progressChart = new Chart(ctx, {
-    type: 'line',
-    data: { labels, datasets },
+    type: 'line', data: { labels, datasets },
     options: {
       responsive: true,
-      plugins: {
-        legend: { labels: { color: '#94a3b8', font: { family: 'Barlow', size: 12 }, boxWidth: 16, padding: 12 } }
-      },
-      scales: {
-        x: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } },
-        y: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } }
-      }
+      plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Barlow', size: 12 }, boxWidth: 16, padding: 12 } } },
+      scales: { x: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } }, y: { ticks: { color: '#64748b' }, grid: { color: '#1f2d45' } } }
     }
   });
 }
@@ -1153,17 +1027,12 @@ function renderDashboard() {
 function renderRounds() {
   const tabs = document.getElementById('round-tabs');
   const detail = document.getElementById('round-detail');
-
   if (appData.rounds.length === 0) {
     tabs.innerHTML = '';
     detail.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>No rounds yet. Create rounds in Admin.</p></div>`;
     return;
   }
-
-  tabs.innerHTML = appData.rounds.map((r, i) =>
-    `<div class="tab ${i===0?'active':''}" onclick="showRoundDetail(${i}, this)">${r.name}</div>`
-  ).join('');
-
+  tabs.innerHTML = appData.rounds.map((r, i) => `<div class="tab ${i===0?'active':''}" onclick="showRoundDetail(${i}, this)">${r.name}</div>`).join('');
   showRoundDetailById(0, detail);
 }
 
@@ -1176,15 +1045,8 @@ function showRoundDetail(idx, el) {
 function showRoundDetailById(idx, container) {
   const round = appData.rounds[idx];
   if (!round) return;
-
   const vegasBadge = '<span style="background:rgba(168,85,247,0.2);border:1px solid #a855f7;color:#a855f7;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;">🎰 VEGAS ROUND</span>';
-  const typeBadge = round.type === 'magic'
-    ? '<span class="magic-badge">✨ MAGIC ROUND</span>'
-    : round.type === 'vegas'
-      ? vegasBadge
-      : round.type === 'origin'
-      ? '<span class="origin-badge">⚡ STATE OF ORIGIN</span>'
-      : '';
+  const typeBadge = round.type === 'magic' ? '<span class="magic-badge">✨ MAGIC ROUND</span>' : round.type === 'vegas' ? vegasBadge : round.type === 'origin' ? '<span class="origin-badge">⚡ STATE OF ORIGIN</span>' : '';
 
   let html = `<div class="card">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
@@ -1192,16 +1054,9 @@ function showRoundDetailById(idx, container) {
       ${typeBadge}
       ${round.scores ? '<span style="color:var(--green);font-size:12px;font-weight:700;">✓ SCORED</span>' : '<span style="color:var(--muted);font-size:12px;">⏳ Pending results</span>'}
     </div>
-    <div class="round-table-wrap">
-    <table class="round-table">
-      <thead>
-        <tr>
-          <th>Game</th>
-          <th>Result</th>
-          ${TIPPERS.map(t => `<th>${t.substring(0,4)}</th>`).join('')}
-        </tr>
-      </thead>
-      <tbody>`;
+    <div class="round-table-wrap"><table class="round-table"><thead><tr><th>Game</th><th>Result</th>
+      ${TIPPERS.map(t => `<th>${t.substring(0,4)}</th>`).join('')}
+    </tr></thead><tbody>`;
 
   round.games.forEach((game, gi) => {
     const result = round.results && round.results[gi];
@@ -1211,25 +1066,16 @@ function showRoundDetailById(idx, container) {
     const isOrigin = round.type === 'origin';
     const showMargin = game.isMarginGame || isOrigin;
 
-    html += `<tr>
-      <td style="text-align:left;">
-        <strong>${game.home} v ${game.away}</strong>
-        ${game.isMarginGame && !isOrigin ? '<br><small style="color:var(--accent)">Margin Game</small>' : ''}
-      </td>
-      <td>
-        ${winner ? `<strong>${winner}</strong>${margin !== undefined ? `<br><small>${margin > 0 ? '+' : ''}${margin}</small>` : ''}${isOrigin && motm ? `<br><small style="color:var(--accent2)">MOTM: ${motm}</small>` : ''}` : '<span style="color:var(--muted)">TBD</span>'}
-      </td>`;
+    html += `<tr><td style="text-align:left;"><strong>${game.home} v ${game.away}</strong>${game.isMarginGame && !isOrigin ? '<br><small style="color:var(--accent)">Margin Game</small>' : ''}</td>
+      <td>${winner ? `<strong>${winner}</strong>${margin !== undefined ? `<br><small>${margin > 0 ? '+' : ''}${margin}</small>` : ''}${isOrigin && motm ? `<br><small style="color:var(--accent2)">MOTM: ${motm}</small>` : ''}` : '<span style="color:var(--muted)">TBD</span>'}</td>`;
 
     TIPPERS.forEach(tipper => {
       const tip = round.tips && round.tips[tipper] && round.tips[tipper][gi];
       const tipTeam = tip && tip.team;
       const tipMargin = tip && tip.margin;
       const tipMotm = tip && tip.motm;
-
       let cls = '';
-      if (winner && tipTeam) {
-        cls = tipTeam === winner ? 'tip-correct' : 'tip-wrong';
-      }
+      if (winner && tipTeam) { cls = tipTeam === winner ? 'tip-correct' : 'tip-wrong'; }
       let motmHtml = '';
       if (isOrigin && tipMotm) {
         const motmCorrect = motm && tipMotm.toLowerCase().trim() === motm.toLowerCase().trim();
@@ -1237,20 +1083,12 @@ function showRoundDetailById(idx, container) {
       }
       html += `<td class="${cls}">${tipTeam || '–'}${showMargin && tipMargin !== undefined && tipMargin !== '' ? `<br><small>${tipMargin}</small>` : ''}${motmHtml}</td>`;
     });
-
     html += '</tr>';
   });
 
-  // Round totals row
   if (round.scores) {
-    const sorted = TIPPERS.map(t => t);
-    html += `<tr style="border-top:2px solid var(--border);">
-      <td><strong>Points</strong></td>
-      <td></td>
-      ${TIPPERS.map(t => `<td><strong>${round.scores[t] || 0}</strong></td>`).join('')}
-    </tr>`;
+    html += `<tr style="border-top:2px solid var(--border);"><td><strong>Points</strong></td><td></td>${TIPPERS.map(t => `<td><strong>${round.scores[t] || 0}</strong></td>`).join('')}</tr>`;
   }
-
   html += '</tbody></table></div></div>';
   container.innerHTML = html;
 }
@@ -1274,20 +1112,11 @@ function renderAdmin() {
 
 function checkPassword() {
   const pw = document.getElementById('admin-pw-input').value;
-  if (pw === ADMIN_PASSWORD) {
-    adminUnlocked = true;
-    document.getElementById('pw-error').textContent = '';
-    renderAdmin();
-  } else {
-    document.getElementById('pw-error').textContent = 'Incorrect password.';
-  }
+  if (pw === ADMIN_PASSWORD) { adminUnlocked = true; document.getElementById('pw-error').textContent = ''; renderAdmin(); }
+  else { document.getElementById('pw-error').textContent = 'Incorrect password.'; }
 }
 
-function lockAdmin() {
-  adminUnlocked = false;
-  document.getElementById('admin-pw-input').value = '';
-  renderAdmin();
-}
+function lockAdmin() { adminUnlocked = false; document.getElementById('admin-pw-input').value = ''; renderAdmin(); }
 
 function updateMode() {
   const mode = document.getElementById('data-mode').value;
@@ -1302,55 +1131,31 @@ function saveConfig() {
   showAlert('Config saved!', 'success');
 }
 
-// Games builder
 let gamesList = [];
 
 function renderGamesList() {
   const container = document.getElementById('games-container');
-  if (gamesList.length === 0) {
-    container.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-bottom:8px;">No games added yet.</p>';
-    return;
-  }
-
+  if (gamesList.length === 0) { container.innerHTML = '<p style="color:var(--muted);font-size:13px;margin-bottom:8px;">No games added yet.</p>'; return; }
   container.innerHTML = gamesList.map((g, i) => `
     <div class="game-row">
-      <div>
-        <div class="game-label">${g.home || '?'} v ${g.away || '?'}</div>
-        <div style="font-size:11px;color:var(--muted);">${g.isMarginGame ? '⭐ Margin game' : ''}</div>
-      </div>
-      <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;">
-        <input type="checkbox" ${g.isMarginGame ? 'checked' : ''} onchange="toggleMarginGame(${i}, this.checked)" style="width:auto;">
-        Margin
-      </label>
+      <div><div class="game-label">${g.home || '?'} v ${g.away || '?'}</div><div style="font-size:11px;color:var(--muted);">${g.isMarginGame ? '⭐ Margin game' : ''}</div></div>
+      <label style="font-size:12px;display:flex;align-items:center;gap:6px;cursor:pointer;"><input type="checkbox" ${g.isMarginGame ? 'checked' : ''} onchange="toggleMarginGame(${i}, this.checked)" style="width:auto;"> Margin</label>
       <button class="btn btn-secondary btn-sm" onclick="removeGame(${i})">✕</button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function addGame() {
   const roundType = document.getElementById('new-round-type').value;
   const teams = getTeamListForType(roundType);
-  // Prompt-style inline add
   const container = document.getElementById('games-container');
   const div = document.createElement('div');
   div.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px;';
   div.innerHTML = `
     <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;">
-      <div>
-        <label>Home Team</label>
-        <select id="new-home">
-          ${teams.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}
-        </select>
-      </div>
-      <div>
-        <label>Away Team</label>
-        <select id="new-away">
-          ${teams.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}
-        </select>
-      </div>
+      <div><label>Home Team</label><select id="new-home">${teams.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}</select></div>
+      <div><label>Away Team</label><select id="new-away">${teams.map(t => `<option value="${t.code}">${t.name}</option>`).join('')}</select></div>
       <button class="btn btn-sm" onclick="confirmAddGame(this)">Add</button>
-    </div>
-  `;
+    </div>`;
   container.appendChild(div);
 }
 
@@ -1363,33 +1168,15 @@ function confirmAddGame(btn) {
   renderGamesList();
 }
 
-function toggleMarginGame(idx, val) {
-  // Clear all margin games first, then set this one
-  gamesList.forEach(g => g.isMarginGame = false);
-  gamesList[idx].isMarginGame = val;
-  renderGamesList();
-}
-
-function removeGame(idx) {
-  gamesList.splice(idx, 1);
-  renderGamesList();
-}
+function toggleMarginGame(idx, val) { gamesList.forEach(g => g.isMarginGame = false); gamesList[idx].isMarginGame = val; renderGamesList(); }
+function removeGame(idx) { gamesList.splice(idx, 1); renderGamesList(); }
 
 function saveRound() {
   const name = document.getElementById('new-round-name').value.trim();
   const type = document.getElementById('new-round-type').value;
   if (!name) { showAlert('Please enter a round name.', 'error'); return; }
   if (gamesList.length === 0) { showAlert('Please add at least one game.', 'error'); return; }
-
-  const round = {
-    id: Date.now(),
-    name, type,
-    games: JSON.parse(JSON.stringify(gamesList)),
-    tips: null,
-    results: null,
-    scores: null
-  };
-
+  const round = { id: Date.now(), name, type, games: JSON.parse(JSON.stringify(gamesList)), tips: null, results: null, scores: null };
   appData.rounds.push(round);
   saveToStorage();
   gamesList = [];
@@ -1402,8 +1189,7 @@ function saveRound() {
 function populateAdminRoundSelects() {
   ['tips-round-select','results-round-select'].forEach(id => {
     const sel = document.getElementById(id);
-    sel.innerHTML = '<option value="">-- Select Round --</option>' +
-      appData.rounds.map((r,i) => `<option value="${i}">${r.name}</option>`).join('');
+    sel.innerHTML = '<option value="">-- Select Round --</option>' + appData.rounds.map((r,i) => `<option value="${i}">${r.name}</option>`).join('');
   });
 }
 
@@ -1413,11 +1199,9 @@ function loadTipsForm() {
   const container = document.getElementById('tips-form');
   const saveBtn = document.getElementById('tips-save-btn');
   if (idx === '') { container.innerHTML = ''; saveBtn.style.display = 'none'; return; }
-
   const round = appData.rounds[idx];
   const existingTips = round.tips || {};
   const isOrigin = round.type === 'origin';
-
   let html = '';
   round.games.forEach((game, gi) => {
     const showMargin = game.isMarginGame || isOrigin;
@@ -1426,19 +1210,14 @@ function loadTipsForm() {
         Game ${gi+1}: ${game.home} v ${game.away}
         ${game.isMarginGame && !isOrigin ? '<span class="magic-badge" style="margin-left:8px;">Margin Game</span>' : ''}
         ${isOrigin ? '<span class="origin-badge" style="margin-left:8px;">ORIGIN — 2pts win, 3pts margin, 1pt MOTM</span>' : ''}
-      </div>
-      <div class="tip-grid">`;
-
+      </div><div class="tip-grid">`;
     TIPPERS.forEach(tipper => {
       const existingTip = existingTips[tipper] && existingTips[tipper][gi];
       const selectedTeam = existingTip ? existingTip.team : '';
       const selectedMargin = existingTip ? existingTip.margin : '';
       const selectedMotm = existingTip ? (existingTip.motm || '') : '';
-
-      html += `<div class="tip-entry">
-        <label>${tipper}</label>
-        <select id="tip-${gi}-${tipper}-team">
-          <option value="">–</option>
+      html += `<div class="tip-entry"><label>${tipper}</label>
+        <select id="tip-${gi}-${tipper}-team"><option value="">–</option>
           <option value="${game.home}" ${selectedTeam===game.home?'selected':''}>${game.home}</option>
           <option value="${game.away}" ${selectedTeam===game.away?'selected':''}>${game.away}</option>
         </select>
@@ -1446,10 +1225,8 @@ function loadTipsForm() {
         ${isOrigin ? `<input type="text" id="tip-${gi}-${tipper}-motm" placeholder="MOTM" value="${selectedMotm}" style="margin-top:4px;font-size:12px;">` : ''}
       </div>`;
     });
-
     html += '</div></div>';
   });
-
   container.innerHTML = html;
   saveBtn.style.display = 'block';
 }
@@ -1458,7 +1235,6 @@ function saveTips() {
   const idx = document.getElementById('tips-round-select').value;
   if (idx === '') return;
   const round = appData.rounds[idx];
-
   const tips = {};
   TIPPERS.forEach(tipper => {
     tips[tipper] = round.games.map((game, gi) => {
@@ -1470,7 +1246,6 @@ function saveTips() {
       return { team, margin, motm };
     });
   });
-
   round.tips = tips;
   saveToStorage();
   showAlert('Tips saved!', 'success');
@@ -1482,23 +1257,19 @@ function loadResultsForm() {
   const container = document.getElementById('results-form');
   const saveBtn = document.getElementById('results-save-btn');
   if (idx === '') { container.innerHTML = ''; saveBtn.style.display = 'none'; return; }
-
   const round = appData.rounds[idx];
   const existingResults = round.results || [];
   const isOrigin = round.type === 'origin';
-
   let html = '';
   round.games.forEach((game, gi) => {
     const existing = existingResults[gi] || {};
     const showMargin = game.isMarginGame || isOrigin;
     html += `<div class="game-row" style="${isOrigin ? 'grid-template-columns:1fr 1fr 1fr 1fr;' : ''}">
-      <div>
-        <div class="game-label">${game.home} v ${game.away}</div>
+      <div><div class="game-label">${game.home} v ${game.away}</div>
         ${game.isMarginGame && !isOrigin ? '<small style="color:var(--accent)">Margin game</small>' : ''}
         ${isOrigin ? '<small style="color:var(--accent2)">Origin</small>' : ''}
       </div>
-      <select id="result-${gi}-winner" style="width:120px;">
-        <option value="">–</option>
+      <select id="result-${gi}-winner" style="width:120px;"><option value="">–</option>
         <option value="${game.home}" ${existing.winner===game.home?'selected':''}>${game.home}</option>
         <option value="${game.away}" ${existing.winner===game.away?'selected':''}>${game.away}</option>
       </select>
@@ -1506,7 +1277,6 @@ function loadResultsForm() {
       ${isOrigin ? `<input type="text" id="result-${gi}-motm" placeholder="MOTM" value="${existing.motm||''}" style="width:140px;font-size:13px;">` : ''}
     </div>`;
   });
-
   container.innerHTML = html;
   saveBtn.style.display = 'block';
 }
@@ -1515,7 +1285,6 @@ function saveResults() {
   const idx = document.getElementById('results-round-select').value;
   if (idx === '') return;
   const round = appData.rounds[idx];
-
   round.results = round.games.map((game, gi) => {
     const winner = document.getElementById(`result-${gi}-winner`)?.value || '';
     const marginEl = document.getElementById(`result-${gi}-margin`);
@@ -1524,8 +1293,6 @@ function saveResults() {
     const motm = motmEl ? motmEl.value.trim() : undefined;
     return { winner, margin, motm };
   });
-
-  // Calculate scores
   round.scores = calculateRoundScores(round);
   saveToStorage();
   showAlert('Results saved and scores calculated!', 'success');
@@ -1536,25 +1303,16 @@ function saveResults() {
 // ═══════════════════════════════════════════════════════
 function exportData() {
   const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `nrl-tipping-backup-${new Date().toISOString().slice(0,10)}.json`;
-  a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `nrl-tipping-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
 }
 
 function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    try {
-      appData = JSON.parse(e.target.result);
-      saveToStorage();
-      showAlert('Data imported successfully!', 'success');
-      renderAdmin();
-    } catch(err) {
-      showAlert('Invalid JSON file.', 'error');
-    }
+    try { appData = JSON.parse(e.target.result); saveToStorage(); showAlert('Data imported successfully!', 'success'); renderAdmin(); }
+    catch(err) { showAlert('Invalid JSON file.', 'error'); }
   };
   reader.readAsText(file);
 }
@@ -1570,23 +1328,18 @@ function clearAllData() {
 // UTILS
 // ═══════════════════════════════════════════════════════
 function showAlert(msg, type) {
-  const existing = document.querySelector('.floating-alert');
-  if (existing) existing.remove();
+  const existing = document.querySelector('.floating-alert'); if (existing) existing.remove();
   const div = document.createElement('div');
   div.className = `alert alert-${type} floating-alert`;
   div.style.cssText = 'position:fixed;top:80px;right:24px;z-index:999;max-width:320px;box-shadow:0 4px 24px rgba(0,0,0,0.4)';
-  div.textContent = msg;
-  document.body.appendChild(div);
+  div.textContent = msg; document.body.appendChild(div);
   setTimeout(() => div.remove(), 3000);
 }
 
 // ═══════════════════════════════════════════════════════
 // LAST MAN STANDING
 // ═══════════════════════════════════════════════════════
-
-function getLmsData() {
-  return appData.lms || {};
-}
+function getLmsData() { return appData.lms || {}; }
 
 function getLmsPointValue(roundName) {
   const match = roundName.match(/Rd\s*(\d+)/i);
@@ -1598,18 +1351,15 @@ function getLmsPointValue(roundName) {
 }
 
 function getLmsTipperStatus(tipper) {
-  // Returns { alive: bool, points: int, usedTeams: [], rounds: {roundId: {pick, result}} }
   const lms = getLmsData();
   const status = { alive: true, points: 0, usedTeams: [], rounds: {} };
-  
-  // Get all LMS rounds in order
   const lmsRounds = appData.rounds.filter(r => lms[r.id]);
   lmsRounds.forEach(round => {
     const entry = lms[round.id] && lms[round.id][tipper];
     if (!entry) return;
     status.rounds[round.id] = entry;
     if (entry.pick) status.usedTeams.push(entry.pick);
-    if (!status.alive) return; // already eliminated
+    if (!status.alive) return;
     if (entry.result === 'correct') status.points += getLmsPointValue(round.name);
     else if (entry.result === 'wrong') status.alive = false;
   });
@@ -1617,16 +1367,9 @@ function getLmsTipperStatus(tipper) {
 }
 
 function renderLms() {
-  if (adminUnlocked) {
-    document.getElementById('lms-edit-btn').style.display = 'block';
-    populateLmsRoundSelect();
-  }
-
+  if (adminUnlocked) { document.getElementById('lms-edit-btn').style.display = 'block'; populateLmsRoundSelect(); }
   const lms = getLmsData();
-  const lmsRounds = appData.rounds.filter(r => lms[r.id] || r.id); // show all rounds from R6 onwards that have LMS data
   const lmsRoundsWithData = appData.rounds.filter(r => lms[r.id]);
-
-  // Status cards
   const cardsDiv = document.getElementById('lms-status-cards');
   cardsDiv.innerHTML = TIPPERS.map(t => {
     const status = getLmsTipperStatus(t);
@@ -1637,24 +1380,17 @@ function renderLms() {
       <div style="font-family:var(--font-display);font-size:16px;font-weight:700;text-transform:uppercase;">${t}</div>
       <div style="font-size:12px;color:${statusColor};margin-top:4px;font-weight:700;">${statusLabel}</div>
       <div style="font-family:var(--font-display);font-size:28px;font-weight:900;color:var(--accent);margin-top:4px;">${status.points}</div>
-      <div style="font-size:11px;color:var(--muted);">pts</div>
-    </div>`;
+      <div style="font-size:11px;color:var(--muted);">pts</div></div>`;
   }).join('');
 
-  // Round grid
   const thead = document.getElementById('lms-grid-head');
   const tbody = document.getElementById('lms-grid-body');
-
   if (lmsRoundsWithData.length === 0) {
     thead.innerHTML = '<tr><th>Round</th>' + TIPPERS.map(t => `<th style="font-size:11px;">${t.substring(0,5)}</th>`).join('') + '</tr>';
     tbody.innerHTML = `<tr><td colspan="${TIPPERS.length+1}" class="empty-state" style="padding:30px;text-align:center;color:var(--muted);">No LMS rounds entered yet. Starts from Round 6.</td></tr>`;
   } else {
     thead.innerHTML = '<tr><th>Round</th>' + TIPPERS.map(t => `<th style="font-size:11px;">${t.substring(0,5)}</th>`).join('') + '<th>Active</th></tr>';
-    
-    // Track alive status as we go
-    const alive = {};
-    TIPPERS.forEach(t => alive[t] = true);
-
+    const alive = {}; TIPPERS.forEach(t => alive[t] = true);
     tbody.innerHTML = lmsRoundsWithData.map(round => {
       const roundLms = lms[round.id] || {};
       let activeCount = 0;
@@ -1662,42 +1398,24 @@ function renderLms() {
         const entry = roundLms[t];
         if (!alive[t]) return '<td style="color:var(--border);">–</td>';
         if (!entry || !entry.pick) return '<td style="color:var(--muted);">–</td>';
-        
         let bg = '', label = entry.pick;
         if (entry.result === 'correct') { bg = 'color:var(--green);font-weight:700;'; activeCount++; }
         else if (entry.result === 'wrong') { bg = 'color:var(--red);'; alive[t] = false; }
-        else { activeCount++; } // pending result
-        
+        else { activeCount++; }
         return `<td style="font-size:11px;${bg}">${label}</td>`;
       });
-
-      // Update alive after processing wrong results
-      TIPPERS.forEach(t => {
-        const entry = roundLms[t];
-        if (entry && entry.result === 'wrong') alive[t] = false;
-      });
-
-      return `<tr>
-        <td style="font-weight:700;white-space:nowrap;">${round.name}</td>
-        ${cells.join('')}
-        <td style="color:var(--accent2);font-weight:700;">${activeCount}</td>
-      </tr>`;
+      TIPPERS.forEach(t => { const entry = roundLms[t]; if (entry && entry.result === 'wrong') alive[t] = false; });
+      return `<tr><td style="font-weight:700;white-space:nowrap;">${round.name}</td>${cells.join('')}<td style="color:var(--accent2);font-weight:700;">${activeCount}</td></tr>`;
     }).join('');
   }
 
-  // Points row
   if (lmsRoundsWithData.length > 0) {
     const ptRow = document.createElement('tr');
     ptRow.style.borderTop = '2px solid var(--border)';
-    ptRow.innerHTML = '<td><strong>Pts</strong></td>' +
-      TIPPERS.map(t => {
-        const s = getLmsTipperStatus(t);
-        return `<td><strong style="color:var(--accent);">${s.points}</strong></td>`;
-      }).join('') + '<td></td>';
+    ptRow.innerHTML = '<td><strong>Pts</strong></td>' + TIPPERS.map(t => { const s = getLmsTipperStatus(t); return `<td><strong style="color:var(--accent);">${s.points}</strong></td>`; }).join('') + '<td></td>';
     document.getElementById('lms-grid-body').appendChild(ptRow);
   }
 
-  // Used teams
   const usedDiv = document.getElementById('lms-used-teams');
   usedDiv.innerHTML = '<div style="display:flex;flex-direction:column;gap:10px;">' +
     TIPPERS.map(t => {
@@ -1706,23 +1424,16 @@ function renderLms() {
       return `<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <div style="font-family:var(--font-display);font-weight:700;font-size:13px;text-transform:uppercase;width:80px;">${t}</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          ${used.length > 0 
-            ? used.map(team => `<span class="team-badge" style="text-decoration:line-through;opacity:0.6;">${team}</span>`).join('')
-            : '<span style="color:var(--muted);font-size:12px;">None used</span>'}
-        </div>
-      </div>`;
+          ${used.length > 0 ? used.map(team => `<span class="team-badge" style="text-decoration:line-through;opacity:0.6;">${team}</span>`).join('') : '<span style="color:var(--muted);font-size:12px;">None used</span>'}
+        </div></div>`;
     }).join('') + '</div>';
 }
 
-function toggleLmsAdmin() {
-  const panel = document.getElementById('lms-admin-panel');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-}
+function toggleLmsAdmin() { const panel = document.getElementById('lms-admin-panel'); panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; }
 
 function populateLmsRoundSelect() {
   const sel = document.getElementById('lms-round-select');
-  sel.innerHTML = '<option value="">-- Select Round --</option>' +
-    appData.rounds.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
+  sel.innerHTML = '<option value="">-- Select Round --</option>' + appData.rounds.map((r, i) => `<option value="${i}">${r.name}</option>`).join('');
 }
 
 function loadLmsForm() {
@@ -1730,39 +1441,18 @@ function loadLmsForm() {
   const form = document.getElementById('lms-entry-form');
   const saveBtn = document.getElementById('lms-save-btn');
   if (idx === '') { form.innerHTML = ''; saveBtn.style.display = 'none'; return; }
-
   const round = appData.rounds[idx];
   const lms = getLmsData();
   const existing = (lms[round.id] || {});
-
-  // Figure out who is still alive going into this round
   const lmsRoundsBefore = appData.rounds.slice(0, parseInt(idx)).filter(r => lms[r.id]);
-  const aliveMap = {};
-  TIPPERS.forEach(t => aliveMap[t] = true);
-  lmsRoundsBefore.forEach(r => {
-    TIPPERS.forEach(t => {
-      const e = lms[r.id] && lms[r.id][t];
-      if (e && e.result === 'wrong') aliveMap[t] = false;
-    });
-  });
-
-  // Used teams per tipper
-  const usedMap = {};
-  TIPPERS.forEach(t => {
-    usedMap[t] = [];
-    lmsRoundsBefore.forEach(r => {
-      const e = lms[r.id] && lms[r.id][t];
-      if (e && e.pick) usedMap[t].push(e.pick);
-    });
-  });
+  const aliveMap = {}; TIPPERS.forEach(t => aliveMap[t] = true);
+  lmsRoundsBefore.forEach(r => { TIPPERS.forEach(t => { const e = lms[r.id] && lms[r.id][t]; if (e && e.result === 'wrong') aliveMap[t] = false; }); });
+  const usedMap = {}; TIPPERS.forEach(t => { usedMap[t] = []; lmsRoundsBefore.forEach(r => { const e = lms[r.id] && lms[r.id][t]; if (e && e.pick) usedMap[t].push(e.pick); }); });
 
   let html = '<div style="margin-top:12px;">';
   TIPPERS.forEach(t => {
-    const alive = aliveMap[t];
-    const used = usedMap[t];
-    const ex = existing[t] || {};
+    const alive = aliveMap[t]; const used = usedMap[t]; const ex = existing[t] || {};
     const availableTeams = TEAM_LIST.filter(tm => !used.includes(tm.code));
-
     html += `<div style="display:grid;grid-template-columns:120px 1fr 1fr;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
       <div style="font-family:var(--font-display);font-weight:700;font-size:14px;text-transform:uppercase;${!alive?'opacity:0.4;':''}">${t}${!alive?' ❌':''}</div>
       <select id="lms-pick-${t}" ${!alive?'disabled':''} style="padding:6px;font-size:13px;">
@@ -1773,11 +1463,9 @@ function loadLmsForm() {
         <option value="" ${!ex.result?'selected':''}>– Pending –</option>
         <option value="correct" ${ex.result==='correct'?'selected':''}>✅ Correct</option>
         <option value="wrong" ${ex.result==='wrong'?'selected':''}>❌ Wrong / Out</option>
-      </select>
-    </div>`;
+      </select></div>`;
   });
   html += '</div>';
-
   form.innerHTML = html;
   saveBtn.style.display = 'block';
 }
@@ -1787,23 +1475,18 @@ function saveLmsPicks() {
   if (idx === '') return;
   const round = appData.rounds[idx];
   if (!appData.lms) appData.lms = {};
-
   const roundData = {};
   TIPPERS.forEach(t => {
     const pick = document.getElementById(`lms-pick-${t}`)?.value || '';
     const result = document.getElementById(`lms-result-${t}`)?.value || '';
     if (pick || result) roundData[t] = { pick, result };
   });
-
   appData.lms[round.id] = roundData;
-  saveToStorage();
-  renderLms();
+  saveToStorage(); renderLms();
   showAlert('LMS picks saved!', 'success');
 }
 
-function getLmsTotalPoints(tipper) {
-  return getLmsTipperStatus(tipper).points;
-}
+function getLmsTotalPoints(tipper) { return getLmsTipperStatus(tipper).points; }
 
 // ═══════════════════════════════════════════════════════
 // SEASON BETS
@@ -1813,26 +1496,20 @@ const DALLYM_POINTS = [5,4,3,2,1];
 
 function renderSeasonBets() {
   if (adminUnlocked) document.getElementById('season-bets-edit-btn').style.display = 'inline-block';
-
   const sb = appData.seasonBets || {};
   const results = sb.results || {};
   const dallyPicks = sb.dallyM || {};
   const coachPicks = sb.coach || {};
   const ladderPicks = sb.ladder || {};
 
-  // --- Supported Teams ---
   const teamsDiv = document.getElementById('sb-teams-display');
   teamsDiv.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;">
-    ${TIPPERS.map(t => `
-      <div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center;">
+    ${TIPPERS.map(t => `<div style="background:var(--surface2);border-radius:8px;padding:12px;text-align:center;">
         <div style="font-family:var(--font-display);font-size:16px;font-weight:700;text-transform:uppercase;">${t}</div>
         <div style="margin-top:6px;"><span class="team-badge">${TIPPER_TEAMS[t] || '–'}</span></div>
         <div style="font-size:11px;color:var(--muted);margin-top:4px;">${TEAMS[TIPPER_TEAMS[t]] || ''}</div>
-      </div>`).join('')}
-  </div>`;
+      </div>`).join('')}</div>`;
 
-  // --- Combined Season Bets Table ---
-  const dallyResult = results.dallyM || ''; // actual winner
   const dallyTop5 = [results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].map(s => (s||'').toLowerCase().trim());
   const coachResult = (results.coach || '').toLowerCase().trim();
   const ladderResult = results.ladder || [];
@@ -1840,53 +1517,21 @@ function renderSeasonBets() {
   const hasDally = dallyTop5.filter(Boolean).length > 0;
   const hasCoach = !!coachResult;
 
-  // Scores per tipper
-  const dallyScores = {};
-  const coachScores = {};
-  const ladderScores = {};
-  TIPPERS.forEach(t => {
-    dallyScores[t] = 0;
-    coachScores[t] = 0;
-    ladderScores[t] = 0;
-  });
+  const dallyScores = {}, coachScores = {}, ladderScores = {};
+  TIPPERS.forEach(t => { dallyScores[t] = 0; coachScores[t] = 0; ladderScores[t] = 0; });
 
-  if (hasDally) {
-    TIPPERS.forEach(t => {
-      const pick = (dallyPicks[t] || '').toLowerCase().trim();
-      const idx = dallyTop5.indexOf(pick);
-      if (idx !== -1) dallyScores[t] = DALLYM_POINTS[idx];
-    });
-  }
-  if (hasCoach) {
-    TIPPERS.forEach(t => {
-      if ((coachPicks[t] || '').toLowerCase().trim() === coachResult) coachScores[t] = 5;
-    });
-  }
-  if (hasLadder) {
-    TIPPERS.forEach(t => {
-      (ladderPicks[t] || []).forEach((pick, idx) => {
-        const actualPos = ladderResult.indexOf(pick);
-        if (actualPos === idx) ladderScores[t] += 2;
-        else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) ladderScores[t] += 1;
-      });
-    });
-  }
+  if (hasDally) { TIPPERS.forEach(t => { const pick = (dallyPicks[t] || '').toLowerCase().trim(); const idx = dallyTop5.indexOf(pick); if (idx !== -1) dallyScores[t] = DALLYM_POINTS[idx]; }); }
+  if (hasCoach) { TIPPERS.forEach(t => { if ((coachPicks[t] || '').toLowerCase().trim() === coachResult) coachScores[t] = 5; }); }
+  if (hasLadder) { TIPPERS.forEach(t => { (ladderPicks[t] || []).forEach((pick, idx) => { const actualPos = ladderResult.indexOf(pick); if (actualPos === idx) ladderScores[t] += 2; else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) ladderScores[t] += 1; }); }); }
 
   let html = '<div class="table-wrap"><table><thead><tr><th style="min-width:120px;">Category</th>';
   TIPPERS.forEach(t => html += `<th style="min-width:65px;font-size:11px;">${t.substring(0,6)}</th>`);
   html += '</tr></thead><tbody>';
 
-  // Dally M row
   html += '<tr style="background:rgba(240,180,41,0.05)"><td><strong style="color:var(--accent);">🌟 Dally M</strong><br><small style="color:var(--muted);">5/4/3/2/1 pts</small></td>';
-  TIPPERS.forEach(t => {
-    const pick = dallyPicks[t] || '–';
-    const score = dallyScores[t];
-    const cls = hasDally ? (score > 0 ? 'tip-correct' : 'tip-wrong') : '';
-    html += `<td class="${cls}">${pick}${hasDally && score > 0 ? `<br><small>+${score}pt</small>` : ''}</td>`;
-  });
+  TIPPERS.forEach(t => { const pick = dallyPicks[t] || '–'; const score = dallyScores[t]; const cls = hasDally ? (score > 0 ? 'tip-correct' : 'tip-wrong') : ''; html += `<td class="${cls}">${pick}${hasDally && score > 0 ? `<br><small>+${score}pt</small>` : ''}</td>`; });
   html += '</tr>';
 
-  // Dally M score row
   if (hasDally) {
     html += '<tr><td style="color:var(--muted);font-size:12px;">Dally M Score</td>';
     TIPPERS.forEach(t => html += `<td><strong>${dallyScores[t]}</strong></td>`);
@@ -1894,16 +1539,10 @@ function renderSeasonBets() {
     html += `<tr><td colspan="${TIPPERS.length+1}" style="font-size:11px;color:var(--muted);padding:4px 12px;">Top 5: ${[results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].filter(Boolean).join(', ')}</td></tr>`;
   }
 
-  // Spacer
   html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:4px;background:var(--border);"></td></tr>`;
 
-  // First Coach row
   html += '<tr style="background:rgba(239,68,68,0.05)"><td><strong style="color:var(--red);">🔥 First Coach</strong><br><small style="color:var(--muted);">5 pts</small></td>';
-  TIPPERS.forEach(t => {
-    const pick = coachPicks[t] || '–';
-    const correct = hasCoach && (pick.toLowerCase().trim() === coachResult);
-    html += `<td class="${correct ? 'tip-correct' : hasCoach ? 'tip-wrong' : ''}">${pick}${correct ? '<br><small>+3pt</small>' : ''}</td>`;
-  });
+  TIPPERS.forEach(t => { const pick = coachPicks[t] || '–'; const correct = hasCoach && (pick.toLowerCase().trim() === coachResult); html += `<td class="${correct ? 'tip-correct' : hasCoach ? 'tip-wrong' : ''}">${pick}${correct ? '<br><small>+5pt</small>' : ''}</td>`; });
   html += '</tr>';
   if (hasCoach) {
     html += '<tr><td style="color:var(--muted);font-size:12px;">Coach Score</td>';
@@ -1911,114 +1550,48 @@ function renderSeasonBets() {
     html += `</tr><tr><td colspan="${TIPPERS.length+1}" style="font-size:11px;color:var(--muted);padding:4px 12px;">First fired: ${results.coach}</td></tr>`;
   }
 
-  // Spacer
   html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:4px;background:var(--border);"></td></tr>`;
 
-  // Ladder rows
   html += `<tr><td colspan="${TIPPERS.length+1}" style="padding:8px 12px;"><strong style="color:var(--accent2);">🪜 Ladder Predictions</strong> <small style="color:var(--muted);">2pts exact, 1pt ±1 place — 34pts available</small></td></tr>`;
   LADDER_POSITIONS.forEach((pos, idx) => {
     html += `<tr><td><strong>${pos}</strong>${hasLadder && ladderResult[idx] ? `<br><small style="color:var(--muted);">${ladderResult[idx]}</small>` : ''}</td>`;
     TIPPERS.forEach(t => {
       const pick = (ladderPicks[t] || [])[idx] || '–';
       let cls = '';
-      if (hasLadder && pick !== '–') {
-        const actualPos = ladderResult.indexOf(pick);
-        if (actualPos === idx) cls = 'tip-correct';
-        else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) cls = 'pos-same';
-        else if (actualPos !== -1) cls = 'tip-wrong';
-      }
+      if (hasLadder && pick !== '–') { const actualPos = ladderResult.indexOf(pick); if (actualPos === idx) cls = 'tip-correct'; else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) cls = 'pos-same'; else if (actualPos !== -1) cls = 'tip-wrong'; }
       html += `<td class="${cls}" style="font-size:11px;">${pick}</td>`;
     });
     html += '</tr>';
   });
 
-  // Ladder score row
   html += '<tr style="border-top:2px solid var(--border);"><td><strong>Ladder Score</strong></td>';
   TIPPERS.forEach(t => html += `<td><strong>${hasLadder ? ladderScores[t] : '–'}</strong></td>`);
   html += '</tr>';
 
-  // Grand total row
   html += '<tr style="background:rgba(240,180,41,0.08);border-top:2px solid var(--accent);"><td><strong style="color:var(--accent);">Total</strong></td>';
-  TIPPERS.forEach(t => {
-    const total = dallyScores[t] + coachScores[t] + ladderScores[t];
-    html += `<td><strong style="color:var(--accent);">${total > 0 || (hasDally && hasCoach && hasLadder) ? total : '–'}</strong></td>`;
-  });
-  html += '</tr>';
-
-  html += '</tbody></table></div>';
+  TIPPERS.forEach(t => { const total = dallyScores[t] + coachScores[t] + ladderScores[t]; html += `<td><strong style="color:var(--accent);">${total > 0 || (hasDally && hasCoach && hasLadder) ? total : '–'}</strong></td>`; });
+  html += '</tr></tbody></table></div>';
   document.getElementById('sb-combined-display').innerHTML = html;
 }
 
-function showSeasonBetsAdmin() {
-  const panel = document.getElementById('season-bets-admin');
-  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-  if (panel.style.display === 'block') buildSeasonBetsForm();
-}
+function showSeasonBetsAdmin() { const panel = document.getElementById('season-bets-admin'); panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; if (panel.style.display === 'block') buildSeasonBetsForm(); }
 
 function buildSeasonBetsForm() {
   const sb = appData.seasonBets || {};
-  const coachPicks = sb.coach || {};
-  const ladderPicks = sb.ladder || {};
-  const dallyPicks = sb.dallyM || {};
-  const results = sb.results || {};
+  const coachPicks = sb.coach || {}; const ladderPicks = sb.ladder || {}; const dallyPicks = sb.dallyM || {}; const results = sb.results || {};
 
-  // Dally M — one pick per tipper
-  const dallyBody = document.getElementById('dallym-input-rows');
-  dallyBody.innerHTML = TIPPERS.map(t =>
-    `<tr><td style="font-weight:700;">${t}</td>
-     <td><input type="text" id="dm-${t}" value="${dallyPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Player name"></td></tr>`
-  ).join('');
-
-  // Coach picks
-  const coachBody = document.getElementById('coach-input-rows');
-  coachBody.innerHTML = TIPPERS.map(t =>
-    `<tr><td style="font-weight:700;">${t}</td>
-     <td><input type="text" id="coach-${t}" value="${coachPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Coach/Team"></td></tr>`
-  ).join('');
-
-  // Ladder picks
-  const ladderBody = document.getElementById('ladder-input-rows');
-  ladderBody.innerHTML = LADDER_POSITIONS.map((pos, idx) =>
-    `<tr><td><strong>${pos}</strong></td>
-    ${TIPPERS.map(t => `<td><select id="lad-${t}-${idx}" style="padding:3px;font-size:11px;width:65px;">
-      <option value="">–</option>
-      ${TEAM_LIST.map(tm => `<option value="${tm.code}" ${((ladderPicks[t]||[])[idx]===tm.code)?'selected':''}>${tm.code}</option>`).join('')}
-    </select></td>`).join('')}
-    </tr>`
-  ).join('');
-
-  // Result fields
-  const resultLadder = document.getElementById('sb-result-ladder');
-  resultLadder.innerHTML = LADDER_POSITIONS.map((pos, idx) =>
-    `<div><label style="font-size:11px;">${pos}</label>
-    <select id="rl-${idx}" style="padding:4px;font-size:12px;width:100%;">
-      <option value="">–</option>
-      ${TEAM_LIST.map(tm => `<option value="${tm.code}" ${((results.ladder||[])[idx]===tm.code)?'selected':''}>${tm.name}</option>`).join('')}
-    </select></div>`
-  ).join('');
-
-  ['dallym1','dallym2','dallym3','dallym4','dallym5','coach'].forEach(key => {
-    const el = document.getElementById(`sb-result-${key}`);
-    if (el) el.value = results[key] || '';
-  });
+  document.getElementById('dallym-input-rows').innerHTML = TIPPERS.map(t => `<tr><td style="font-weight:700;">${t}</td><td><input type="text" id="dm-${t}" value="${dallyPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Player name"></td></tr>`).join('');
+  document.getElementById('coach-input-rows').innerHTML = TIPPERS.map(t => `<tr><td style="font-weight:700;">${t}</td><td><input type="text" id="coach-${t}" value="${coachPicks[t]||''}" style="width:160px;padding:4px 6px;font-size:12px;" placeholder="Coach/Team"></td></tr>`).join('');
+  document.getElementById('ladder-input-rows').innerHTML = LADDER_POSITIONS.map((pos, idx) => `<tr><td><strong>${pos}</strong></td>${TIPPERS.map(t => `<td><select id="lad-${t}-${idx}" style="padding:3px;font-size:11px;width:65px;"><option value="">–</option>${TEAM_LIST.map(tm => `<option value="${tm.code}" ${((ladderPicks[t]||[])[idx]===tm.code)?'selected':''}>${tm.code}</option>`).join('')}</select></td>`).join('')}</tr>`).join('');
+  document.getElementById('sb-result-ladder').innerHTML = LADDER_POSITIONS.map((pos, idx) => `<div><label style="font-size:11px;">${pos}</label><select id="rl-${idx}" style="padding:4px;font-size:12px;width:100%;"><option value="">–</option>${TEAM_LIST.map(tm => `<option value="${tm.code}" ${((results.ladder||[])[idx]===tm.code)?'selected':''}>${tm.name}</option>`).join('')}</select></div>`).join('');
+  ['dallym1','dallym2','dallym3','dallym4','dallym5','coach'].forEach(key => { const el = document.getElementById(`sb-result-${key}`); if (el) el.value = results[key] || ''; });
 }
 
 function saveSeasonBets() {
   if (!appData.seasonBets) appData.seasonBets = {};
-
-  // Dally M — one pick per tipper
-  const dallyM = {};
-  TIPPERS.forEach(t => { dallyM[t] = document.getElementById(`dm-${t}`)?.value.trim() || ''; });
-  appData.seasonBets.dallyM = dallyM;
-
-  const coach = {};
-  TIPPERS.forEach(t => { coach[t] = document.getElementById(`coach-${t}`)?.value.trim() || ''; });
-  appData.seasonBets.coach = coach;
-
-  const ladder = {};
-  TIPPERS.forEach(t => { ladder[t] = LADDER_POSITIONS.map((_, idx) => document.getElementById(`lad-${t}-${idx}`)?.value || ''); });
-  appData.seasonBets.ladder = ladder;
-
+  const dallyM = {}; TIPPERS.forEach(t => { dallyM[t] = document.getElementById(`dm-${t}`)?.value.trim() || ''; }); appData.seasonBets.dallyM = dallyM;
+  const coach = {}; TIPPERS.forEach(t => { coach[t] = document.getElementById(`coach-${t}`)?.value.trim() || ''; }); appData.seasonBets.coach = coach;
+  const ladder = {}; TIPPERS.forEach(t => { ladder[t] = LADDER_POSITIONS.map((_, idx) => document.getElementById(`lad-${t}-${idx}`)?.value || ''); }); appData.seasonBets.ladder = ladder;
   appData.seasonBets.results = {
     dallym1: document.getElementById('sb-result-dallym1')?.value.trim() || '',
     dallym2: document.getElementById('sb-result-dallym2')?.value.trim() || '',
@@ -2028,31 +1601,29 @@ function saveSeasonBets() {
     coach: document.getElementById('sb-result-coach')?.value.trim() || '',
     ladder: LADDER_POSITIONS.map((_, idx) => document.getElementById(`rl-${idx}`)?.value || '')
   };
-
-  saveToStorage();
-  renderSeasonBets();
+  saveToStorage(); renderSeasonBets();
   showAlert('Season bets saved!', 'success');
 }
 
 // ═══════════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════════
-// ── INIT ──
-// Always load config from local storage first (so we know the Sheets URL)
-// Then always fetch live data from Sheets before rendering anything
+const DEFAULT_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzYmW_b26gtEMsxCHxhFb6mUbVCDX7ukwTIu9RYcKLUpT2rR_C_0wLsQkhA7HL8a-Mz/exec';
+
 (async function init() {
   loadFromStorage();
+  // Always force Sheets mode — this is the single source of truth
+  if (!appData.config) appData.config = {};
+  appData.config.sheetsUrl = DEFAULT_SHEETS_URL;
+  appData.config.mode = 'sheets';
   restoreConfigFields();
   showLoadingState();
-  if (appData.config && appData.config.mode === 'sheets' && appData.config.sheetsUrl) {
-    await loadFromSheets();
-  }
+  await loadFromSheets();
   renderLeaderboard();
 })();
 
 function showLoadingState() {
-  document.getElementById('leaderboard-body').innerHTML =
-    '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading data...</td></tr>';
+  document.getElementById('leaderboard-body').innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:40px;">Loading data...</td></tr>';
 }
 
 function restoreConfigFields() {

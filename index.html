@@ -850,6 +850,39 @@ function calculateRoundScores(round) {
   return scores;
 }
 
+function getSeasonBetPoints(tipper) {
+  const sb = appData.seasonBets || {};
+  const results = sb.results || {};
+  const dallyPicks = sb.dallyM || {};
+  const coachPicks = sb.coach || {};
+  const ladderPicks = sb.ladder || {};
+  let pts = 0;
+
+  // Dally M
+  const dallyTop5 = [results.dallym1,results.dallym2,results.dallym3,results.dallym4,results.dallym5].map(s => (s||'').toLowerCase().trim());
+  if (dallyTop5.filter(Boolean).length > 0) {
+    const pick = (dallyPicks[tipper] || '').toLowerCase().trim();
+    const idx = dallyTop5.indexOf(pick);
+    if (idx !== -1) pts += DALLYM_POINTS[idx];
+  }
+
+  // First Coach
+  const coachResult = (results.coach || '').toLowerCase().trim();
+  if (coachResult && (coachPicks[tipper] || '').toLowerCase().trim() === coachResult) pts += 5;
+
+  // Ladder
+  const ladderResult = results.ladder || [];
+  if (ladderResult.filter(Boolean).length > 0) {
+    (ladderPicks[tipper] || []).forEach((pick, idx) => {
+      const actualPos = ladderResult.indexOf(pick);
+      if (actualPos === idx) pts += 2;
+      else if (Math.abs(actualPos - idx) === 1 && actualPos !== -1) pts += 1;
+    });
+  }
+
+  return pts;
+}
+
 function buildLeaderboard() {
   const cumulative = {};
   TIPPERS.forEach(t => cumulative[t] = []);
@@ -912,8 +945,9 @@ function buildLeaderboard() {
 
   TIPPERS.forEach(t => {
     const lmsPts = getLmsTotalPoints(t);
-    totals[t] += lmsPts;
-    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts;
+    const sbPts = getSeasonBetPoints(t);
+    totals[t] += lmsPts + sbPts;
+    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts + sbPts;
   });
 
   return ranked.map(tipper => ({

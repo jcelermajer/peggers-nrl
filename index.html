@@ -901,6 +901,14 @@ function buildLeaderboard() {
   const totals = {};
   TIPPERS.forEach(t => totals[t] = cumulative[t][n-1] || 0);
 
+  // Add LMS + season bet points BEFORE ranking
+  TIPPERS.forEach(t => {
+    const lmsPts = getLmsTotalPoints(t);
+    const sbPts = getSeasonBetPoints(t);
+    totals[t] += lmsPts + sbPts;
+    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts + sbPts;
+  });
+
   const ranked = TIPPERS.slice().sort((a,b) => totals[b] - totals[a]);
   const rankMap = {};
   ranked.forEach((t, i) => rankMap[t] = i+1);
@@ -942,13 +950,6 @@ function buildLeaderboard() {
 
   const weekScore = {};
   TIPPERS.forEach(t => weekScore[t] = rounds[n-1].scores[t] || 0);
-
-  TIPPERS.forEach(t => {
-    const lmsPts = getLmsTotalPoints(t);
-    const sbPts = getSeasonBetPoints(t);
-    totals[t] += lmsPts + sbPts;
-    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts + sbPts;
-  });
 
   return ranked.map(tipper => ({
     tipper, rank: rankMap[tipper], total: totals[tipper],

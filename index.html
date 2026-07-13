@@ -1622,17 +1622,18 @@ function renderSeasonBets() {
   html += '</tr></tbody></table></div>';
   document.getElementById('sb-combined-display').innerHTML = html;
 
-  // Adjustments
+// Adjustments
   const adjustments = appData.adjustments || [];
   const adjDiv = document.getElementById('sb-adjustments-display');
   if (adjustments.length === 0) {
     adjDiv.innerHTML = '<div style="color:var(--muted);font-size:13px;">No adjustments to date.</div>';
   } else {
-    let adjHtml = '<div class="table-wrap"><table><thead><tr><th>Tipper</th><th style="text-align:right;">Points</th></tr></thead><tbody>';
+    let adjHtml = '<div class="table-wrap"><table><thead><tr><th>Tipper</th><th style="text-align:right;">Points</th><th>Reason</th></tr></thead><tbody>';
     adjustments.forEach(a => {
       const color = a.points < 0 ? 'var(--red)' : 'var(--green)';
       const sign = a.points > 0 ? '+' : '';
-      adjHtml += `<tr><td>${a.tipper}</td><td style="text-align:right;color:${color};font-weight:700;">${sign}${a.points}</td></tr>`;
+      const reason = a.reason ? a.reason : '<span style="color:var(--muted);">—</span>';
+      adjHtml += `<tr><td>${a.tipper}</td><td style="text-align:right;color:${color};font-weight:700;">${sign}${a.points}</td><td style="font-size:13px;">${reason}</td></tr>`;
     });
     adjHtml += '</tbody></table></div>';
     adjDiv.innerHTML = adjHtml;

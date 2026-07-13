@@ -573,6 +573,10 @@
     <div class="card-title">🌟 Dally M · 🔥 First Coach · 🪜 Ladder</div>
     <div id="sb-combined-display"></div>
   </div>
+    <div class="card" style="margin-bottom:20px;">
+    <div class="card-title">⚖️ Manual Adjustments</div>
+    <div id="sb-adjustments-display"></div>
+  </div>
   <div id="season-bets-admin" style="display:none;">
     <div class="card" style="margin-bottom:20px;">
       <div class="card-title">✏️ Enter Season Bets Data</div>
@@ -731,7 +735,10 @@ function loadFromStorage() {
 async function saveToSheets() {
   if (!appData.config.sheetsUrl) return;
   try {
-    const payload = JSON.stringify({ action: 'save', data: appData });
+    // Adjustments live in a separate sheet tab — strip so they don't bloat A1
+    const dataToSend = { ...appData };
+    delete dataToSend.adjustments;
+    const payload = JSON.stringify({ action: 'save', data: dataToSend });
     const res = await fetch(appData.config.sheetsUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
@@ -850,6 +857,12 @@ function calculateRoundScores(round) {
   return scores;
 }
 
+function getAdjustmentTotal(tipper) {
+  return (appData.adjustments || [])
+    .filter(a => a.tipper === tipper)
+    .reduce((sum, a) => sum + (a.points || 0), 0);
+}
+  
 function getSeasonBetPoints(tipper) {
   const sb = appData.seasonBets || {};
   const results = sb.results || {};
@@ -905,8 +918,9 @@ function buildLeaderboard() {
   TIPPERS.forEach(t => {
     const lmsPts = getLmsTotalPoints(t);
     const sbPts = getSeasonBetPoints(t);
-    totals[t] += lmsPts + sbPts;
-    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts + sbPts;
+    const adjPts = getAdjustmentTotal(t);
+    totals[t] += lmsPts + sbPts + adjPts;
+    if (cumulative[t].length > 0) cumulative[t][cumulative[t].length-1] += lmsPts + sbPts + adjPts;
   });
 
   const ranked = TIPPERS.slice().sort((a,b) => totals[b] - totals[a]);
@@ -1607,6 +1621,22 @@ function renderSeasonBets() {
   TIPPERS.forEach(t => { const total = dallyScores[t] + coachScores[t] + ladderScores[t]; html += `<td><strong style="color:var(--accent);">${total > 0 || (hasDally && hasCoach && hasLadder) ? total : '–'}</strong></td>`; });
   html += '</tr></tbody></table></div>';
   document.getElementById('sb-combined-display').innerHTML = html;
+
+  // Adjustments
+  const adjustments = appData.adjustments || [];
+  const adjDiv = document.getElementById('sb-adjustments-display');
+  if (adjustments.length === 0) {
+    adjDiv.innerHTML = '<div style="color:var(--muted);font-size:13px;">No adjustments to date.</div>';
+  } else {
+    let adjHtml = '<div class="table-wrap"><table><thead><tr><th>Tipper</th><th style="text-align:right;">Points</th></tr></thead><tbody>';
+    adjustments.forEach(a => {
+      const color = a.points < 0 ? 'var(--red)' : 'var(--green)';
+      const sign = a.points > 0 ? '+' : '';
+      adjHtml += `<tr><td>${a.tipper}</td><td style="text-align:right;color:${color};font-weight:700;">${sign}${a.points}</td></tr>`;
+    });
+    adjHtml += '</tbody></table></div>';
+    adjDiv.innerHTML = adjHtml;
+  }
 }
 
 function showSeasonBetsAdmin() { const panel = document.getElementById('season-bets-admin'); panel.style.display = panel.style.display === 'none' ? 'block' : 'none'; if (panel.style.display === 'block') buildSeasonBetsForm(); }

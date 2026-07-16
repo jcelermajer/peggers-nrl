@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pegger's Tipping 2026</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: grid; place-items: center;
+           min-height: 100vh; margin: 0; background: #111; color: #eee; text-align: center; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <p>Pegger's Tipping is closed for maintenance — back in a week.</p>
+</body>
+</html>
